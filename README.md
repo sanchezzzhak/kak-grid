@@ -57,7 +57,7 @@ Once the extension is installed, simply use it in your code by  :
                  ],
               ],
               'view_count' => [
-                  'attribute' => 'redirect_count',
+                  'attribute' => 'view_count',
                   'options' => [
                       'summary' => GridView::SUMMARY_SUM,
                   ],
@@ -65,7 +65,7 @@ Once the extension is installed, simply use it in your code by  :
               'redirect_count' => [
                   'attribute' => 'redirect_count',
                   'options' => [
-                      'summary' => 'redirect_count',
+                       'summary' => GridView::SUMMARY_SUM,
                   ],
               ],
               'ratio (redirect/view)' => [
