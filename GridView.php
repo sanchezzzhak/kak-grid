@@ -84,7 +84,7 @@ class GridView extends \yii\grid\GridView
             if(!$column->visible)
                 continue;
             $summary = ArrayHelper::getValue($column->options,'summary',false);
-            $summaryLabel = ArrayHelper::getValue($column->options,'summary-label',false);
+            $summaryLabel = ArrayHelper::getValue($column->options,'summaryLabel',false);
             if($summary){
                 foreach ($models as $index => $model) {
                     $key = $keys[$index];
