@@ -1,0 +1,32 @@
+{
+    "name": "kak/grid",
+    "description": "GridView, TreeGrid widgets for Yii2",
+    "type": "library",
+    "keywords": ["yii2","GridView","TreeGrid"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/sanchezzzhak/kak-grid/issues?state=open",
+        "source": "https://github.com/sanchezzzhak/kak-grid"
+    },
+    "authors": [
+        {
+            "name": "Tutik Alexsandr",
+            "email": "sanchezzzhak@ya.ru"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*",
+        "bower-asset/blueimp-tmpl": "2.5.4"
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "kak\\widgets\\grid\\": ""
+        }
+    }
+}
