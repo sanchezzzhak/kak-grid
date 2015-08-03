@@ -27,7 +27,7 @@ Once the extension is installed, simply use it in your code by  :
 ```php
      <?php use kak\widgets\grid\GridView; ?>
      <?=GridView::widget([
-           'showPageSummary' => true,
+          'showFooter' => true,
           'dataProvider' => $provider,
           'columns' => [
               'stream_id' => [
@@ -50,21 +50,15 @@ Once the extension is installed, simply use it in your code by  :
                   'value'  => function($data){
                       return Html::img($data->country->flag_url,['title' => $data->country->name_ru]);
                   },
-                 'options' => [
-                    'summaryLabel' => '<b>Total redirect</b>',
-                 ],
+                 'footer' =>  '<b>Total redirect</b>',
               ],
               'view_count' => [
                   'attribute' => 'view_count',
-                  'options' => [
-                      'summary' => GridView::SUMMARY_SUM,
-                  ],
+                  'footer'    => GridView::footerSummary($provider->models,'view_count',GridView::SUMMARY_SUM),
               ],
               'redirect_count' => [
                   'attribute' => 'redirect_count',
-                  'options' => [
-                       'summary' => GridView::SUMMARY_SUM,
-                  ],
+                  'footer'    => GridView::footerSummary($provider->models,'redirect_count',GridView::SUMMARY_SUM),
               ],
               'ratio (redirect/view)' => [
                   'header' => 'Ratio',

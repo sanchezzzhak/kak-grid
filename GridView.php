@@ -22,7 +22,6 @@ class GridView extends \yii\grid\GridView
     const SUMMARY_MIN = 'min';
 
     public $paginationPageSize = [20,50,100];
-    public $showPageSummary = true;
 
     public function init()
     {
@@ -164,16 +163,36 @@ class GridView extends \yii\grid\GridView
     {
         $cells = [];
         foreach ($this->columns as $column) {
+            if(!$column->visible) continue;
             /* @var $column DataColumn */
             $cells[] = $column->renderFooterCell();
         }
         $content = Html::tag('tr', implode('', $cells), $this->footerRowOptions);
         if ($this->filterPosition == self::FILTER_POS_FOOTER) {
             $content .= $this->renderFilters();
-        }
-
-        return $content;
+        };
+        return "<tfoot>\n" .  $content . "\n</tfoot>";
     }
+
+    /**
+     * Renders the filter.
+     * @return string the rendering result.
+     */
+    public function renderFilters()
+    {
+        if ($this->filterModel !== null) {
+            $cells = [];
+            foreach ($this->columns as $column) {
+                /* @var $column Column */
+                if(!$column->visible) continue;
+                $cells[] = $column->renderFilterCell();
+            }
+            return Html::tag('tr', implode('', $cells), $this->filterRowOptions);
+        } else {
+            return '';
+        }
+    }
+
 
     /**
      * Renders the data models for the grid view.
@@ -186,45 +205,16 @@ class GridView extends \yii\grid\GridView
         $tableBody = $this->renderTableBody();
 
         $tableFooter = $this->showFooter ? $this->renderTableFooter() : false;
-        $pageSummary = $this->showPageSummary ? $this->renderPageSummary() : false;
 
         $content = array_filter([
             $caption,
             $columnGroup,
             $tableHeader,
-            ( $tableFooter ||  $pageSummary ? "<tfoot>\n" .  $tableFooter . $pageSummary . "\n</tfoot>" : ""),
             $tableBody,
+            $tableFooter
         ]);
 
         return Html::tag('table', implode("\n", $content), $this->tableOptions);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function renderPageSummary(){
-        $models = array_values($this->dataProvider->getModels());
-        $keys = $this->dataProvider->getKeys();
-        $rows  = $cells = [];
-
-        foreach ($this->columns as $col => $column) {
-            if(!$column->visible)
-                continue;
-            $summary = ArrayHelper::getValue($column->options,'summary',false);
-            $summaryLabel = ArrayHelper::getValue($column->options,'summaryLabel',false);
-            if($summary){
-                foreach ($models as $index => $model) {
-                    $key = $keys[$index];
-                    $rows[$col][] = $column->getDataCellValue($model, $key, $index);
-                }
-                $cells[] = Html::tag('td', (isset($rows[$col]) ? $this->calculateSummary( $rows[$col] ,$summary) : ''),[]);
-                continue;
-            }
-            $cells[] = Html::tag('td', ($summaryLabel) ? $summaryLabel : '',[]);
-        }
-        return Html::tag('tr', implode('', $cells), []);
-
     }
 
     /**
@@ -232,12 +222,12 @@ class GridView extends \yii\grid\GridView
      * @param $type
      * @return number
      */
-    protected function calculateSummary($data,$type)
+    public static function footerSummary($data,$attribute,$type)
     {
+        $data = ArrayHelper::getColumn($data,$attribute);
         switch ($type) {
             case GridView::SUMMARY_SUM:
                 return array_sum($data);
-
             case GridView::SUMMARY_COUNT:
                 return count($data);
             case GridView::SUMMARY_AVG:
