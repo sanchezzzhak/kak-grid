@@ -15,4 +15,7 @@ class GridViewAsset extends AssetBundle
     public $js = [
         'kak.grid-view.js'
     ];
+    public $css = [
+        'kak.grid-view.css'
+    ];
 } 
