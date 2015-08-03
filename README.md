@@ -1,10 +1,8 @@
 # kak-grid
 Grid, TreeGrid widgets for Yii2
-================
-
 Preview
 -----------
-
+<img src="https://lh3.googleusercontent.com/-ViaLrNwzD_8/Vb9fHnWvtPI/AAAAAAAAAEQ/sFC83sEAMhY/s480-Ic42/kakGridPreview.png">
 Installation
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
