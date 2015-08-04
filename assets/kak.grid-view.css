@@ -5,7 +5,9 @@
     position: relative;
     display: inherit;
 }
-
+.date-filter-range .input-group {
+    display: block;
+}
 .kak-grid .column-filter .input-group .form-control {
     display: block;
 }
