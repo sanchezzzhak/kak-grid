@@ -23,9 +23,15 @@
         var defaultOptions = {};
         this.options  = $.extend(defaultOptions,options);
 
-        this.$parent.find('.dropdown-checkbox-content').on('click.dropdown-checkbox.data-api', function(e) {
+
+        this.$parent.find('.dropdown-checkbox-content').on('click.dropdown.data-api', function(e) {
             e.stopPropagation();
         });
+        this.$parent.find('.dropdown-checkbox').on('hide.bs.dropdown', $.proxy(function(e){
+            this._saveData();
+            location.reload();
+        },this));
+
 
         this.$parent.find('.dropdown-checkbox-content a').on('click', $.proxy(function(e){
             e.preventDefault();
@@ -34,13 +40,14 @@
                 var $input = $target.find('input');
                 $input.prop( 'checked', !$input.prop('checked') );
             }
-            this._saveData();
         },this));
 
         this.$parent.find('.pagination-size').on('change', $.proxy(function(e){
             this._saveData();
             location.reload();
         },this));
+
+
     };
 
 

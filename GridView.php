@@ -123,7 +123,6 @@ class GridView extends \yii\grid\GridView
 
     protected function renderShowHideColumns()
     {
-
         $items = [];
         /** @var $column DataColumn */
         foreach($this->columns as $column){
@@ -143,7 +142,7 @@ class GridView extends \yii\grid\GridView
             }
 
 
-            echo Html::beginTag('div',['class' => 'btn-group pull-right']);
+            echo Html::beginTag('div',['class' => 'dropdown-checkbox btn-group pull-right']);
                 echo Html::tag('button','Show / hide columns',['class' => ' btn btn-default dropdown-toggle' , 'data-toggle' => 'dropdown']);
                 echo \yii\bootstrap\Dropdown::widget([
                         'items' => $items,
