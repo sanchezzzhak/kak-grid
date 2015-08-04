@@ -23,13 +23,27 @@
         var defaultOptions = {};
         this.options  = $.extend(defaultOptions,options);
 
-
         this.$parent.find('.dropdown-checkbox-content').on('click.dropdown.data-api', function(e) {
             e.stopPropagation();
         });
+
         this.$parent.find('.dropdown-checkbox').on('hide.bs.dropdown', $.proxy(function(e){
             this._saveData();
             location.reload();
+        },this));
+
+        this.$parent.find('.column-filter .btn-container-open').on('click',$.proxy(function(e){
+            e.preventDefault();
+            $(e.currentTarget).closest('.column-filter').find('.column-filter-container').toggleClass('open');
+        },this));
+
+        this.$parent.find('.date-filter-range .btn-apply').on('click',$.proxy(function(e){
+            var $target  = $(e.currentTarget);
+            var $input   = $target.closest('.column-filter').find('.date-filter-range-input')
+            var inputs = $target.closest('.column-filter').find('.datetimepicker');
+            $input.val($(inputs[0]).val() + ' - ' + $(inputs[1]).val() );
+            $target.closest('.column-filter-container').removeClass('open');
+            this.$parent.find('.grid-view').yiiGridView('applyFilter');
         },this));
 
 

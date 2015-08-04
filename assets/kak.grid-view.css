@@ -1,3 +1,35 @@
 .kak-grid-panel {
     margin-bottom: 10px;
 }
+.kak-grid .column-filter {
+    position: relative;
+    display: inherit;
+}
+
+.kak-grid .column-filter .input-group .form-control {
+    display: block;
+}
+
+.kak-grid .date-filter-range.open {
+    display: block;
+    position: absolute;
+}
+.kak-grid .date-filter-range {
+    width: 660px;
+    display: none;
+    background: #fafafa;
+    border: 1px solid #e2e7eb;
+    padding: 0 10px;
+    padding-top: 10px;
+}
+.kak-grid .date-filter-range .col-md-6 {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+.kak-grid .date-filter-range .col-md-6:first-child {
+    border-right: 1px solid #e2e7eb;
+}
+/*
+.kak-grid .date-filter-range .input-group {
+    display: block;
+}*/
