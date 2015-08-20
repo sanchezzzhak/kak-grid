@@ -113,7 +113,7 @@ class GridView extends \yii\grid\GridView
         $key = 'kak-grid_'.$this->id;
         if(isset($_COOKIE[$key])){
             $jsonConfig = Json::decode($_COOKIE[$key]);
-            if($this->dataProvider->pagination){
+            if(isset($this->dataProvider->pagination)){
                 /** @var ActiveDataProvider $data */
                 $this->dataProvider->pagination->setPageSize(  ArrayHelper::getValue($jsonConfig,'paginationSize',20));
             }
