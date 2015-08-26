@@ -23,6 +23,11 @@ class GridView extends \yii\grid\GridView
 
     public $paginationPageSize = [20,50,100];
 
+    public $menuColumns =  true;
+    public $menuColumnsBtnLabel = 'Show / hide columns';
+
+
+
     public function init()
     {
         $this->prepareInitSort();
@@ -36,7 +41,6 @@ class GridView extends \yii\grid\GridView
 
         echo Html::beginTag('div',['class' => 'kak-grid']);
             $this->renderShowHideColumns();
-
             parent::run();
         echo Html::endTag('div');
 
@@ -123,32 +127,42 @@ class GridView extends \yii\grid\GridView
 
     protected function renderShowHideColumns()
     {
+        if((!$this->paginationPageSize || !count($this->paginationPageSize))
+            && !$this->menuColumns)
+            return;
+
         $items = [];
         /** @var $column DataColumn */
-        foreach($this->columns as $column){
-            $items[] = ['label' => Html::checkbox('',$column->visible,[]) . '&nbsp;' . strip_tags($column->renderHeaderCell()), 'url' => '#',  'encode' => false ];
+        foreach ($this->columns as $column) {
+
+            if (ArrayHelper::getValue($column->options, 'menu', true) )
+                $items[] = ['label' => Html::checkbox('', $column->visible, []) . '&nbsp;' . strip_tags($column->renderHeaderCell()), 'url' => '#', 'encode' => false];
         }
 
-        echo Html::beginTag('div',['class' => 'clearfix kak-grid-panel']);
+        echo Html::beginTag('div', ['class' => 'clearfix kak-grid-panel']);
 
-            if($this->dataProvider->pagination) {
-                echo Html::beginTag('div',['class' => 'btn-group pull-left']);
+        if ($this->paginationPageSize && count($this->paginationPageSize)) {
+
+            if ($this->dataProvider->pagination) {
+                echo Html::beginTag('div', ['class' => 'btn-group pull-left']);
                 echo Html::dropDownList('',
                     $this->dataProvider->pagination->getPageSize(),
-                    array_combine(array_values($this->paginationPageSize),$this->paginationPageSize),
-                    ['class' => 'pagination-size form-control' ]
+                    array_combine(array_values($this->paginationPageSize), $this->paginationPageSize),
+                    ['class' => 'pagination-size form-control']
                 );
                 echo Html::endTag('div');
             }
+        }
 
-
-            echo Html::beginTag('div',['class' => 'dropdown-checkbox btn-group pull-right']);
-                echo Html::tag('button','Show / hide columns',['class' => ' btn btn-default dropdown-toggle' , 'data-toggle' => 'dropdown']);
+        if ($this->menuColumns){
+            echo Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group pull-right']);
+                echo Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
                 echo \yii\bootstrap\Dropdown::widget([
-                        'items' => $items,
-                        'options' => [ 'class' => 'dropdown-checkbox-content' ]
+                    'items' => $items,
+                    'options' => ['class' => 'dropdown-checkbox-content']
                 ]);
             echo Html::endTag('div');
+        }
 
         echo Html::endTag('div');
     }

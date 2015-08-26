@@ -1,5 +1,6 @@
 # kak-grid
 Grid, TreeGrid widgets for Yii2
+
 Preview
 -----------
 <img src="https://lh3.googleusercontent.com/-ViaLrNwzD_8/Vb9fHnWvtPI/AAAAAAAAAEQ/sFC83sEAMhY/s480-Ic42/kakGridPreview.png">
@@ -27,6 +28,9 @@ Once the extension is installed, simply use it in your code by  :
 ```php
      <?php use kak\widgets\grid\GridView; ?>
      <?=GridView::widget([
+          'paginationPageSize' => [20,50,100], // is empty array hide control
+          'menuColumns' =>  true,   // Show menu control
+          'menuColumnsBtnLabel' => 'Show / hide columns',  // menu btn label
           'showFooter' => true,
           'dataProvider' => $provider,
           'columns' => [
@@ -54,7 +58,7 @@ Once the extension is installed, simply use it in your code by  :
               ],
               'view_count' => [
                   'attribute' => 'view_count',
-                  'footer'    => GridView::footerSummary($provider->models,'view_count',GridView::SUMMARY_SUM),
+                  'footer'    => GridView::footerSummary($provider->models,'view_count',GridView::SUMMARY_SUM),   // helper calculating function
               ],
               'redirect_count' => [
                   'attribute' => 'redirect_count',
@@ -65,6 +69,13 @@ Once the extension is installed, simply use it in your code by  :
                   'value' =>  function($data){
                       return round( (int)$data->redirect_count/(int)$data->view_count ,2);
                   }
+              ],
+              'actions' => [
+                  'class' => \yii\grid\ActionColumn::className(),
+                  'template' => '{view}',
+                  'options' => [
+                      'menu' => false    // Hiding in the menu list
+                  ]
               ],
           ]
       ])?>
