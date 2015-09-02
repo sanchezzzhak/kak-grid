@@ -26,8 +26,6 @@ class GridView extends \yii\grid\GridView
     public $menuColumns =  true;
     public $menuColumnsBtnLabel = 'Show / hide columns';
 
-
-
     public function init()
     {
         $this->prepareInitSort();
@@ -99,7 +97,7 @@ class GridView extends \yii\grid\GridView
     protected function prepareShowHideColumns()
     {
         $key = 'kak-grid_'.$this->id;
-        if(isset($_COOKIE[$key])){
+        if($this->menuColumns && isset($_COOKIE[$key])){
             $jsonConfig = Json::decode($_COOKIE[$key]);
             $columns = ArrayHelper::getValue($jsonConfig,'columns',[]);
             $i = 0;
@@ -115,7 +113,7 @@ class GridView extends \yii\grid\GridView
     protected function prepareInitSort()
     {
         $key = 'kak-grid_'.$this->id;
-        if(isset($_COOKIE[$key])){
+        if(count($this->paginationPageSize) && isset($_COOKIE[$key]) ){
             $jsonConfig = Json::decode($_COOKIE[$key]);
             if(isset($this->dataProvider->pagination)){
                 /** @var ActiveDataProvider $data */
