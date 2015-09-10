@@ -26,23 +26,36 @@ class GridView extends \yii\grid\GridView
     public $menuColumns =  true;
     public $menuColumnsBtnLabel = 'Show / hide columns';
 
+    public $layout = "{toolbar}\n{summary}\n{items}\n{pager}";
+
+
     public function init()
     {
         $this->prepareInitSort();
         GridViewAsset::register($this->getView());
         parent::init();
     }
-
+    
     public function run()
     {
         $this->prepareShowHideColumns();
-
         echo Html::beginTag('div',['class' => 'kak-grid']);
-            $this->renderShowHideColumns();
             parent::run();
         echo Html::endTag('div');
-
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function renderSection($name)
+    {
+        switch($name) {
+            case '{toolbar}':
+                return $this->renderToolbar();
+        }
+        return parent::renderSection($name);
+    }
+
 
     /**
      * Renders the table header.
@@ -97,7 +110,7 @@ class GridView extends \yii\grid\GridView
     protected function prepareShowHideColumns()
     {
         $key = 'kak-grid_'.$this->id;
-        if($this->menuColumns && isset($_COOKIE[$key])){
+        if(count($this->columns) > 0 && $this->menuColumns && isset($_COOKIE[$key])){
             $jsonConfig = Json::decode($_COOKIE[$key]);
             $columns = ArrayHelper::getValue($jsonConfig,'columns',[]);
             $i = 0;
@@ -123,11 +136,14 @@ class GridView extends \yii\grid\GridView
     }
 
 
-    protected function renderShowHideColumns()
+    protected function renderToolbar()
     {
+        if(!count($this->columns))
+            return '';
+
         if((!$this->paginationPageSize || !count($this->paginationPageSize))
             && !$this->menuColumns)
-            return;
+            return  '';
 
         $items = [];
         /** @var $column DataColumn */
@@ -136,33 +152,32 @@ class GridView extends \yii\grid\GridView
             if (ArrayHelper::getValue($column->options, 'menu', true) )
                 $items[] = ['label' => Html::checkbox('', $column->visible, []) . '&nbsp;' . strip_tags($column->renderHeaderCell()), 'url' => '#', 'encode' => false];
         }
-
-        echo Html::beginTag('div', ['class' => 'clearfix kak-grid-panel']);
+        $content = Html::beginTag('div', ['class' => 'clearfix kak-grid-panel']);
 
         if ($this->paginationPageSize && count($this->paginationPageSize)) {
-
             if ($this->dataProvider->pagination) {
-                echo Html::beginTag('div', ['class' => 'btn-group pull-left']);
-                echo Html::dropDownList('',
+                $content.= Html::beginTag('div', ['class' => 'btn-group pull-left']);
+                $content.= Html::dropDownList('',
                     $this->dataProvider->pagination->getPageSize(),
                     array_combine(array_values($this->paginationPageSize), $this->paginationPageSize),
                     ['class' => 'pagination-size form-control']
                 );
-                echo Html::endTag('div');
+                $content.= Html::endTag('div');
             }
         }
 
         if ($this->menuColumns){
-            echo Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group pull-right']);
-                echo Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
-                echo \yii\bootstrap\Dropdown::widget([
+            $content.= Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group pull-right']);
+            $content.= Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
+            $content.= \yii\bootstrap\Dropdown::widget([
                     'items' => $items,
                     'options' => ['class' => 'dropdown-checkbox-content']
                 ]);
-            echo Html::endTag('div');
+            $content.= Html::endTag('div');
         }
 
-        echo Html::endTag('div');
+        $content.= Html::endTag('div');
+        return $content;
     }
 
 
