@@ -8,7 +8,8 @@ use yii\helpers\Html;
 class GridKeyVal extends GridView
 {
     public $group = null;
-    public $groupHeader = '';
+    public $groupOptions = [];
+
 
     /**
      * Renders the data models.
@@ -41,14 +42,25 @@ class GridKeyVal extends GridView
     {
         /** @var Column $column */
         foreach ($this->columns as $col => &$column) {
-            if ($col == $this->groupHeader) {
+            if ($col == $this->group) {
                 $column->contentOptions['colspan'] = 2;
-                return Html::tag('tr', $column->renderDataCell($model, $key, $index));
+                return Html::tag('tr', $column->renderDataCell($model, $key, $index), $this->groupOptions );
             }
         }
         return null;
     }
 
+    protected function renderGroupHeaderRow()
+    {
+        /** @var Column $column */
+        foreach ($this->columns as $col => &$column) {
+            if ($col == $this->group) {
+                $column->headerOptions['colspan'] = 2;
+                return Html::tag('tr', $column->renderHeaderCell(), $this->groupOptions );
+            }
+        }
+        return null;
+    }
 
     public function renderTableBody()
     {
@@ -56,7 +68,7 @@ class GridKeyVal extends GridView
         $keys = $this->dataProvider->getKeys();
         $rows = [];
 
-
+        $rows[]  = $this->renderGroupHeaderRow();
 
         foreach ($models as $index => $model) {
             $key = $keys[$index];
@@ -67,13 +79,13 @@ class GridKeyVal extends GridView
                 }
             }
 
+
             $rows[]  = $this->renderGroupRow($model, $key, $index);
 
             /** @var Column $column */
             foreach ($this->columns as $col => $column) {
                 $cells = [];
-
-                if($col == $this->groupHeader) {
+                if($col == $this->group) {
                     continue;
                 }
 
@@ -89,8 +101,6 @@ class GridKeyVal extends GridView
 
                 $rows[]  = Html::tag('tr', implode('', $cells), $options);
             }
-
-
 
             if ($this->afterRow !== null) {
                 $row = call_user_func($this->afterRow, $model, $key, $index, $this);
