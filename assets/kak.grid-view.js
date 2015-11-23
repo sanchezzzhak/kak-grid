@@ -27,9 +27,12 @@
             e.stopPropagation();
         });
 
+         var inputChange = false;
+
         this.$parent.find('.dropdown-checkbox').on('hide.bs.dropdown', $.proxy(function(e){
             this._saveData();
-            location.reload();
+            if(inputChange)
+                location.reload();
         },this));
 
         this.$parent.find('.column-filter .btn-container-open').on('click',$.proxy(function(e){
@@ -46,13 +49,13 @@
             this.$parent.find('.grid-view').yiiGridView('applyFilter');
         },this));
 
-
         this.$parent.find('.dropdown-checkbox-content a').on('click', $.proxy(function(e){
             e.preventDefault();
             var $target = $(e.currentTarget);
             if(!$target.is('input')){
                 var $input = $target.find('input');
                 $input.prop( 'checked', !$input.prop('checked') );
+                inputChange = true;
             }
         },this));
 
