@@ -85,11 +85,15 @@
                 $columns.push($(input).prop('checked')? 1 : 0);
             });
             var data = {
-                'paginationSize' : this.$parent.find('.pagination-size').val(),
-                'columns': $columns,
+                'columns': $columns
             };
-            var key = 'kak-grid.' + (this.$parent.find('.grid-view').attr('id'));
+            var key = 'kak-grid_' + (this.$parent.find('.grid-view').attr('id'));
             this._setCookie(key, JSON.stringify(data),1);
+
+            var paginationSize =  this.$parent.find('.pagination-size').val();
+            this._setCookie('kak-grid',JSON.stringify({paginationSize:paginationSize}),1);
+
+
         }
     };
 

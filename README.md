@@ -29,9 +29,12 @@ Once the extension is installed, simply use it in your code by  :
      <?php use kak\widgets\grid\GridView; ?>
      <?=GridView::widget([
           'paginationPageSize' => [20,50,100], // is empty array hide control
-          'menuColumns' =>  true,   // Show menu control
-          'menuColumnsBtnLabel' => 'Show / hide columns',  // menu btn label
+          'menuControl' =>  true,   // Show menu control
+          'menuColumnsBtnLabel' => 'Show / hide columns',
           'showFooter' => true,
+          'toolbar' => [
+            'default' => ''
+          ], // or string  ''
           'dataProvider' => $provider,
           'columns' => [
               'stream_id' => [
@@ -80,3 +83,12 @@ Once the extension is installed, simply use it in your code by  :
           ]
       ])?>
 ```
+
+## options widget
+ `paginationPageSize`  array  dropdown control, if empty list the hide control
+ `menuColumns`  Show/hide menu control
+ `menuColumnsBtnLabel` 
+
+
+
+

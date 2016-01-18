@@ -3,6 +3,7 @@ namespace kak\widgets\grid;
 use Yii;
 use yii\base\View;
 use yii\data\ActiveDataProvider;
+use yii\data\Pagination;
 use yii\grid\Column;
 use yii\grid\DataColumn;
 use yii\helpers\ArrayHelper;
@@ -21,17 +22,24 @@ class GridView extends \yii\grid\GridView
     const SUMMARY_MAX = 'max';
     const SUMMARY_MIN = 'min';
 
-    public $paginationPageSize = [20,50,100];
+    public $paginationPageSize = [20,50,100,300];
 
     public $menuColumns =  true;
     public $menuColumnsBtnLabel = 'Show / hide columns';
 
-    public $layout = "{toolbar}\n{summary}\n{items}\n{pager}";
+    public $toolbar = [
+        //{menu} {pageSize}
+        'default' => '
+        <div class="btn-group pull-left">{pageSize}</div>
+        <div class="btn-group pull-right">{menu}</div>
+        <div class="btn-group pull-right">{actions}</div>
+        '
+    ];
 
+    public $layout = "{toolbar}\n{summary}\n{items}\n{pager}";
 
     public function init()
     {
-        $this->prepareInitSort();
         GridViewAsset::register($this->getView());
         parent::init();
     }
@@ -44,18 +52,41 @@ class GridView extends \yii\grid\GridView
         echo Html::endTag('div');
     }
 
+    public function renderActions()
+    {
+        return '';
+    }
+
+    public function renderPaginationPageSize()
+    {
+        if (!$this->paginationPageSize || !count($this->paginationPageSize)) {
+            return '';
+        }
+        $content = Html::dropDownList('', self::getPaginationSize(),
+            array_combine(array_values($this->paginationPageSize), $this->paginationPageSize),
+            ['class' => 'pagination-size form-control']
+        );
+        return $content;
+
+    }
+
     /**
      * @inheritdoc
      */
     public function renderSection($name)
     {
         switch($name) {
+            case '{menu}':
+                return $this->renderMenu();
             case '{toolbar}':
                 return $this->renderToolbar();
+            case '{pageSize}':
+                return $this->renderPaginationPageSize();
+            case '{actions}':
+                return $this->renderActions();
         }
         return parent::renderSection($name);
     }
-
 
     /**
      * Renders the table header.
@@ -123,60 +154,74 @@ class GridView extends \yii\grid\GridView
         }
     }
 
-    protected function prepareInitSort()
+    public static function getPaginationSize()
     {
-        $key = 'kak-grid_'.$this->id;
-        if(count($this->paginationPageSize) && isset($_COOKIE[$key]) ){
+        $key = 'kak-grid';
+        if (isset($_COOKIE[$key])) {
             $jsonConfig = Json::decode($_COOKIE[$key]);
-            if(isset($this->dataProvider->pagination)){
-                /** @var ActiveDataProvider $data */
-                $this->dataProvider->pagination->setPageSize(  ArrayHelper::getValue($jsonConfig,'paginationSize',20));
-            }
+            return ArrayHelper::getValue($jsonConfig, 'paginationSize', 100);
         }
+        return 100;
     }
 
 
-    protected function renderToolbar()
+    public function renderMenu()
     {
-        if(!count($this->columns))
+        if (!$this->menuColumns) {
             return '';
-
-        if((!$this->paginationPageSize || !count($this->paginationPageSize))
-            && !$this->menuColumns)
-            return  '';
+        }
 
         $items = [];
         /** @var $column DataColumn */
         foreach ($this->columns as $column) {
 
-            if (ArrayHelper::getValue($column->options, 'menu', true) )
-                $items[] = ['label' => Html::checkbox('', $column->visible, []) . '&nbsp;' . strip_tags($column->renderHeaderCell()), 'url' => '#', 'encode' => false];
+            if (ArrayHelper::getValue($column->options, 'menu', true))
+                $items[] = [
+                    'label' => Html::checkbox('', $column->visible, []) . '&nbsp;' . strip_tags($column->renderHeaderCell()),
+                    'url' => '#', 'encode' => false
+                ];
         }
+
+        $content = Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group']);
+        $content.= Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
+        $content.= \yii\bootstrap\Dropdown::widget([
+            'items' => $items,
+            'options' => ['class' => 'dropdown-checkbox-content']
+        ]);
+        $content.= Html::endTag('div');
+
+        return $content;
+    }
+
+
+    protected function renderToolbar()
+    {
         $content = Html::beginTag('div', ['class' => 'clearfix kak-grid-panel']);
 
-        if ($this->paginationPageSize && count($this->paginationPageSize)) {
-            if ($this->dataProvider->pagination) {
-                $content.= Html::beginTag('div', ['class' => 'btn-group pull-left']);
-                $content.= Html::dropDownList('',
-                    $this->dataProvider->pagination->getPageSize(),
-                    array_combine(array_values($this->paginationPageSize), $this->paginationPageSize),
-                    ['class' => 'pagination-size form-control']
-                );
-                $content.= Html::endTag('div');
+        $toolbar = '';
+        if (is_string($this->toolbar)) {
+            $toolbar = $this->toolbar;
+        }
+
+        if (is_array($this->toolbar)) {
+            foreach ($this->toolbar as $item) {
+                if (is_array($item)) {
+                    $content = ArrayHelper::getValue($item, 'content', '');
+                    $options = ArrayHelper::getValue($item, 'options', []);
+                    Html::addCssClass($options, 'btn-group');
+                    $toolbar .= Html::tag('div', $content, $options);
+                } else {
+                    $toolbar .= "\n{$item}";
+                }
             }
         }
 
-        if ($this->menuColumns){
-            $content.= Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group pull-right']);
-            $content.= Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
-            $content.= \yii\bootstrap\Dropdown::widget([
-                    'items' => $items,
-                    'options' => ['class' => 'dropdown-checkbox-content']
-                ]);
-            $content.= Html::endTag('div');
-        }
-
+        $content.= preg_replace_callback("/{\\w+}/", function ($matches)  {
+            $content = $this->renderSection($matches[0]);
+            return $content === false ? $matches[0] : $content;
+        }, $toolbar);
         $content.= Html::endTag('div');
+
         return $content;
     }
 
