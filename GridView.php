@@ -24,11 +24,12 @@ class GridView extends \yii\grid\GridView
 
     public $paginationPageSize = [20,50,100,300];
 
-    public $menuColumns =  true;
+    public $menuColumns  =  true;
+    //public $resizeColumn =  true;
+
     public $menuColumnsBtnLabel = 'Show / hide columns';
 
     public $toolbar = [
-        //{menu} {pageSize}
         'default' => '
         <div class="btn-group pull-left">{pageSize}</div>
         <div class="btn-group pull-right">{menu}</div>
@@ -46,7 +47,7 @@ class GridView extends \yii\grid\GridView
     
     public function run()
     {
-        $this->prepareShowHideColumns();
+        $this->prepareVisibilityColumns();
         echo Html::beginTag('div',['class' => 'kak-grid']);
             parent::run();
         echo Html::endTag('div');
@@ -57,7 +58,7 @@ class GridView extends \yii\grid\GridView
         return '';
     }
 
-    public function renderPaginationPageSize()
+    public function renderPageSize()
     {
         if (!$this->paginationPageSize || !count($this->paginationPageSize)) {
             return '';
@@ -81,7 +82,7 @@ class GridView extends \yii\grid\GridView
             case '{toolbar}':
                 return $this->renderToolbar();
             case '{pageSize}':
-                return $this->renderPaginationPageSize();
+                return $this->renderPageSize();
             case '{actions}':
                 return $this->renderActions();
         }
@@ -138,7 +139,7 @@ class GridView extends \yii\grid\GridView
 
 
 
-    protected function prepareShowHideColumns()
+    protected function prepareVisibilityColumns()
     {
         $key = 'kak-grid_'.$this->id;
         if(count($this->columns) > 0 && $this->menuColumns && isset($_COOKIE[$key])){
@@ -259,9 +260,9 @@ class GridView extends \yii\grid\GridView
                 $cells[] = $column->renderFilterCell();
             }
             return Html::tag('tr', implode('', $cells), $this->filterRowOptions);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
 
