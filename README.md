@@ -31,6 +31,7 @@ Once the extension is installed, simply use it in your code by  :
           'paginationPageSize' => [20,50,100], // is empty array hide control
           'menuControl' =>  true,   // Show menu control
           'menuColumnsBtnLabel' => 'Show / hide columns',
+          'tableWrapperClass' => 'table table-responsive', // Wrapper class for table, if not defined not rendered.
           'showFooter' => true,
           'toolbar' => [
             'default' => ''

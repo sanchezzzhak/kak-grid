@@ -24,6 +24,11 @@ class GridView extends \yii\grid\GridView
 
     public $paginationPageSize = [20,50,100,300];
 
+    /**
+     * @var null|string
+     */
+    public $tableWrapperClass = null;
+
     public $menuColumns  =  true;
     //public $resizeColumn =  true;
 
@@ -286,7 +291,13 @@ class GridView extends \yii\grid\GridView
             $tableFooter
         ]);
 
-        return Html::tag('table', implode("\n", $content), $this->tableOptions);
+        $contentTable = Html::tag('table', implode("\n", $content), $this->tableOptions);
+
+        if (!is_null($this->tableWrapperClass)) {
+            $contentTable = Html::tag('div', $contentTable, ['class' => $this->tableWrapperClass]);
+        }
+
+        return $contentTable;
     }
 
     /**
