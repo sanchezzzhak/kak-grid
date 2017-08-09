@@ -22,26 +22,39 @@ class GridView extends \yii\grid\GridView
     const SUMMARY_MAX = 'max';
     const SUMMARY_MIN = 'min';
 
+    /** @var array */
     public $paginationPageSize = [20,50,100,300];
-
+    /** @var int  */
+    public $defaulPageSize = 100;
     /**
      * @var null|string
      */
     public $tableWrapperClass = null;
+    /**
+     * @var bool
+     */
+    public $showMenuColumn  =  false;
+    /** @var bool */
+    public $showPageSize = true;
+    /** @var string */
 
-    public $menuColumns  =  true;
-    //public $resizeColumn =  true;
-
-    public $menuColumnsBtnLabel = 'Show / hide columns';
-
+    /**
+     * @var array
+     */
     public $toolbar = [
         'default' => '
-        <div class="btn-group pull-left">{pageSize}</div>
-        <div class="btn-group pull-right">{menu}</div>
-        <div class="btn-group pull-right">{actions}</div>
+            <div class="btn-group pull-left">{pageSize}</div>
+            <div class="btn-group pull-right">{menu}</div>
+            <div class="btn-group pull-right">{actions}</div>
         '
     ];
-
+    /**
+     * @var string
+     */
+    public $dataColumnClass = '\kak\widgets\grid\DataColumn';
+    /**
+     * @var string
+     */
     public $layout = "{toolbar}\n{summary}\n{items}\n{pager}";
 
     public function init()
@@ -147,7 +160,7 @@ class GridView extends \yii\grid\GridView
     protected function prepareVisibilityColumns()
     {
         $key = 'kak-grid_'.$this->id;
-        if(count($this->columns) > 0 && $this->menuColumns && isset($_COOKIE[$key])){
+        if(count($this->columns) > 0 && $this->showMenuColumn && isset($_COOKIE[$key])){
             $jsonConfig = Json::decode($_COOKIE[$key]);
             $columns = ArrayHelper::getValue($jsonConfig,'columns',[]);
             $i = 0;
@@ -162,18 +175,14 @@ class GridView extends \yii\grid\GridView
 
     public static function getPaginationSize()
     {
-        $key = 'kak-grid';
-        if (isset($_COOKIE[$key])) {
-            $jsonConfig = Json::decode($_COOKIE[$key]);
-            return ArrayHelper::getValue($jsonConfig, 'paginationSize', 100);
-        }
-        return 100;
+        $key = 'kak-grid-page-size';
+        return $value = Yii::$app->session->get($key, 100);
     }
 
 
     public function renderMenu()
     {
-        if (!$this->menuColumns) {
+        if (!$this->showMenuColumn) {
             return '';
         }
 
@@ -273,6 +282,7 @@ class GridView extends \yii\grid\GridView
 
     /**
      * Renders the data models for the grid view.
+     * @return string
      */
     public function renderItems()
     {
@@ -303,7 +313,7 @@ class GridView extends \yii\grid\GridView
     /**
      * @param $data
      * @param $type
-     * @return number
+     * @return number|string
      */
     public static function footerSummary($data,$attribute,$type)
     {

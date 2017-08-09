@@ -7,7 +7,7 @@ use yii\helpers\Html;
  * Class DateColumn
  * @package kak\widgets\grid
  */
-class DateRangeColumn extends \yii\grid\DataColumn
+class DateRangeColumn extends DataColumn
 {
 
     public $labelDateFrom  = 'Date From';

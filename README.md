@@ -1,4 +1,4 @@
-# kak-grid
+<!-- # kak-grid
 Grid, TreeGrid widgets for Yii2
 
 Preview
@@ -42,7 +42,7 @@ Once the extension is installed, simply use it in your code by  :
                   'header' => 'Stream',
                   'format' => 'html',
                   'value'  => function($data){
-                      return '[' . $data->stream_id . '] '. Html::a($data->stream->name,['/dashboard/stream/update', 'id' => $data->stream->id ]);
+                      return '[' . $data->stream_id . '] '. Html::a($data->stream->name,['stream/update', 'id' => $data->stream->id ]);
                   }
               ],
               'date_key',
@@ -89,7 +89,14 @@ Once the extension is installed, simply use it in your code by  :
  `paginationPageSize`  array  dropdown control, if empty list the hide control
  `menuColumns`  Show/hide menu control
  `menuColumnsBtnLabel` 
+-->
 
-
-
-
+## test configuration
+```
+cd project_dir 
+php composer.phar require kak/grid "dev-master"
+download codecept.phar & save to dir roor
+cd project_dir/vendor/kak/grid
+php -f ../../../codecept.phar bootstrap
+php -f ../../../codecept.phar build
+```
