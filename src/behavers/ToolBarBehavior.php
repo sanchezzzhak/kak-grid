@@ -6,8 +6,27 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\bootstrap\ButtonGroup;
 
-class ToolBarBehaviors extends Behavior
+/**
+ * Class ToolBarBehavior
+ * @package kak\widgets\grid\behaviors
+ * ```php
+    'behaviors' => [
+        [
+            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+                'toolbar' => [
+                    [
+                        'content' => \kak\widgets\grid\PageSize::widget()
+                    ]
+            ]
+        ]
+    ],
+ * ```
+ */
+class ToolBarBehavior extends Behavior
 {
+    /** @var $owner kak\widgets\grid\GridView  */
+
+
 //    /***
 //     *
 //     * ```
@@ -71,43 +90,27 @@ class ToolBarBehaviors extends Behavior
     {
         $content = Html::beginTag('div', ['class' => 'clearfix kak-grid-panel']);
             $toolbar = '';
-            if (is_array($this->toolbar)) {
 
+            if (is_array($this->toolbar)) {
                 foreach ($this->toolbar as $item) {
                     if (is_array($item)) {
-
-                        echo "1-1\n";
-
-                        $content = ArrayHelper::getValue($item, 'content', '');
+                        $context = ArrayHelper::getValue($item, 'content', '');
                         $options = ArrayHelper::getValue($item, 'options', []);
                         Html::addCssClass($options, 'btn-group');
-                        $toolbar .= Html::tag('div', $content, $options);
-                    } else {
-                        $toolbar .= "\n{$item}";
+                        $toolbar .= Html::tag('div', $context, $options);
                     }
                 }
             }
-            /*
-            $content.= preg_replace_callback("/{\\w+}/", function ($matches)  {
-                $content = $this->renderSection($matches[0]);
-                return $content === false ? $matches[0] : $content;
-            }, $toolbar );*/
-            //
 
-        $content.= $toolbar;
+            $content.= preg_replace_callback("/{\\w+}/", function ($matches)  {
+                $content = $this->owner->renderSection($matches[0]);
+                return $content === false ? $matches[0] : $content;
+            }, $toolbar );
+
         $content.= Html::endTag('div');
 
         return $content;
     }
-
-    ///**
-    // * @inheritdoc
-    // */
-    //protected function renderSection($name)
-    //{
-    //    return $name;
-    //}
-
 
 
 

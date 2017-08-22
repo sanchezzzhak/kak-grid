@@ -17,7 +17,7 @@ class PageSize extends \yii\base\Widget
     /**
      * @var string the label text.
      */
-    public $label = 'items';
+    public $label = '';
 
     /**
      * @var integer the defualt page size. This page size will be used when the $_GET['per-page'] is empty.
@@ -33,7 +33,9 @@ class PageSize extends \yii\base\Widget
     /**
      * @var array the list of page sizes
      */
-    public $sizes = [20 => 20, 25 => 25, 50 => 50, 100 => 100, 200 => 200];
+    public $sizes = [
+        20 => 20, 25 => 25, 50 => 50, 100 => 100, 200 => 200
+    ];
 
     /**
      * @var string the template to be used for rendering the output.
@@ -70,10 +72,13 @@ class PageSize extends \yii\base\Widget
 
         $perPage = !empty($_GET[$this->pageSizeParam]) ? $_GET[$this->pageSizeParam] : $this->defaultPageSize;
 
+        if(!isset($this->options['class'])){
+            Html::addCssClass($this->options, 'form-control input-sm');
+        }
         $listHtml = Html::dropDownList($this->pageSizeParam, $perPage, $this->sizes, $this->options);
         $labelHtml = Html::label($this->label, $this->options['id'], $this->labelOptions);
+        $output = str_replace(['{list}', '{label}'], [$listHtml, $labelHtml], $this->template);
 
-        $output = $listHtml; //str_replace(['{list}', '{label}'], [$listHtml, $labelHtml], $this->template);
 
         return $output;
     }

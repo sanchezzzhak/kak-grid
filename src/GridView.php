@@ -19,7 +19,7 @@ use kak\widgets\grid\bundles\GridViewAsset;
 class GridView extends \yii\grid\GridView
 {
 
-    private $_behaviors;
+    private $_behaviors = [];
 
     /**
      * Provide the option to be able to set behaviors on GridView configuration.
@@ -29,6 +29,9 @@ class GridView extends \yii\grid\GridView
     {
         $this->_behaviors = $behaviors;
     }
+
+
+
 
     /**
      * get behaviors
@@ -49,11 +52,6 @@ class GridView extends \yii\grid\GridView
      * @var null|string
      */
     public $tableWrapperClass = null;
-
-
-    /**
-     * @var array
-     */
 
 
     /**
