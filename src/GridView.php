@@ -9,6 +9,7 @@ use yii\grid\DataColumn;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
+use kak\widgets\grid\bundles\GridViewAsset;
 
 /**
  * Class GridView
@@ -16,11 +17,6 @@ use yii\helpers\Json;
  */
 class GridView extends \yii\grid\GridView
 {
-    const SUMMARY_SUM  = 'sum';
-    const SUMMARY_COUNT = 'count';
-    const SUMMARY_AVG = 'avg';
-    const SUMMARY_MAX = 'max';
-    const SUMMARY_MIN = 'min';
 
     /** @var array */
     public $paginationPageSize = [20,50,100,300];
@@ -51,7 +47,7 @@ class GridView extends \yii\grid\GridView
     /**
      * @var string
      */
-    public $dataColumnClass = '\kak\widgets\grid\DataColumn';
+    public $dataColumnClass = '\kak\widgets\grid\columns\DataColumn';
     /**
      * @var string
      */
@@ -310,6 +306,11 @@ class GridView extends \yii\grid\GridView
         return $contentTable;
     }
 
+    const SUMMARY_SUM  = 'sum';
+    const SUMMARY_COUNT = 'count';
+    const SUMMARY_AVG = 'avg';
+    const SUMMARY_MAX = 'max';
+    const SUMMARY_MIN = 'min';
     /**
      * @param $data
      * @param $type
@@ -317,7 +318,7 @@ class GridView extends \yii\grid\GridView
      */
     public static function footerSummary($data,$attribute,$type)
     {
-        $data = ArrayHelper::getColumn($data,$attribute);
+        $data = ArrayHelper::getColumn($data, $attribute);
         switch ($type) {
             case GridView::SUMMARY_SUM:
                 return array_sum($data);
@@ -332,5 +333,6 @@ class GridView extends \yii\grid\GridView
         }
         return '';
     }
+
 
 } 

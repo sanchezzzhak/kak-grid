@@ -1,5 +1,5 @@
 <?php
-namespace kak\widgets\grid;
+namespace kak\widgets\grid\columns;
 use yii\base\Model;
 use yii\helpers\Html;
 
