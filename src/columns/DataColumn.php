@@ -59,21 +59,27 @@ class DataColumn extends \yii\grid\DataColumn
 
 
     /**
-     * Renders the footer cell.
+     * Renders the footer cell content.
+     * The default implementation simply renders [[footer]].
+     * This method may be overridden to customize the rendering of the footer cell.
+     * @return string the rendering result
      */
-    public function renderFooterCell()
+    public function renderFooterCellContent()
     {
-        if($footer = $this->renderFooterSummary()){
-            $this->footer =  $this->grid->formatter->format($footer, $this->format);
+        if($footer = $this->getFooterCellSummary()){
+            $this->footer = $footer;
         }
-        return \yii\helpers\Html::tag('td', $this->renderFooterCellContent(), $this->footerOptions);
+        if(!empty($this->footer)){
+            $this->footer =  $this->grid->formatter->format($this->footer, $this->format);
+        }
+        return parent::renderFooterCellContent();
     }
 
     /**
-     * Renders the footer cell summary
-     * @return mixed|null|number|string
+     * get cell summary value
+     * @return null|number
      */
-    public function renderFooterSummary()
+    public function getFooterCellSummary()
     {
         if ($this->summary instanceof Closure || is_callable($this->summary)) {
             return call_user_func($this->footerSummer, $this->grid->dataProvider->getModels(), $this);
