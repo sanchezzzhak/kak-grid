@@ -30,9 +30,6 @@ class GridView extends \yii\grid\GridView
         $this->_behaviors = $behaviors;
     }
 
-
-
-
     /**
      * get behaviors
      * @param array $behaviors
@@ -42,12 +39,6 @@ class GridView extends \yii\grid\GridView
         return ArrayHelper::merge($this->_behaviors, parent::behaviors());
     }
 
-
-    /** @var bool */
-    public $showPageSize = true;
-
-    /** @var int  */
-    public $defaulPageSize = 100;
     /**
      * @var null|string
      */
@@ -78,17 +69,19 @@ class GridView extends \yii\grid\GridView
     {
        // $this->prepareVisibilityColumns();
         echo Html::beginTag('div',['class' => 'kak-grid']);
-            parent::run();
+
+        $behaviors = $this->getBehaviors();
+        if (is_array($behaviors)) {
+            foreach ($behaviors as $behavior) {
+                if($behavior->hasMethod('run')) {
+                    $behavior->run();
+                }
+            }
+        }
+        parent::run();
         echo Html::endTag('div');
-
     }
 
-
-
-    public function renderActions()
-    {
-        return '';
-    }
 
     /**
      * @inheritdoc
@@ -96,7 +89,6 @@ class GridView extends \yii\grid\GridView
     public function renderSection($name)
     {
         $method = 'render' . ucfirst(str_replace(['{', '}'], '', $name));
-
         $behaviors = $this->getBehaviors();
         if (is_array($behaviors)) {
             foreach ($behaviors as $behavior) {
@@ -106,75 +98,8 @@ class GridView extends \yii\grid\GridView
                 }
             }
         }
-
-       //switch($name) {
-       //    case '{menu}':
-       //        return $this->renderMenu();
-       //    case '{toolbar}':
-       //        return $this->renderToolbar();
-       //    case '{actions}':
-       //        return $this->renderActions();
-       //}
         return parent::renderSection($name);
     }
-
-
-
-
-
-
-    protected function prepareVisibilityColumns()
-    {
-        $key = 'kak-grid_'.$this->id;
-        /*if(count($this->columns) > 0 && $this->showMenuColumn && isset($_COOKIE[$key])){
-            $jsonConfig = Json::decode($_COOKIE[$key]);
-            $columns = ArrayHelper::getValue($jsonConfig,'columns',[]);
-            $i = 0;
-            foreach($this->columns as &$column){
-                if( isset($columns[$i]) ){
-                    $column->visible = (bool)$columns[$i];
-                }
-                $i++;
-            }
-        }*/
-    }
-
-    public static function getPaginationSize()
-    {
-        $key = 'kak-grid-page-size';
-        return $value = Yii::$app->session->get($key, 100);
-    }
-
-
-    public function renderMenu()
-    {
-        if (!$this->showMenuColumn) {
-            return '';
-        }
-
-        $items = [];
-        /** @var $column DataColumn */
-        foreach ($this->columns as $column) {
-
-            if (ArrayHelper::getValue($column->options, 'menu', true))
-                $items[] = [
-                    'label' => Html::checkbox('', $column->visible, []) . '&nbsp;' . strip_tags($column->renderHeaderCell()),
-                    'url' => '#', 'encode' => false
-                ];
-        }
-
-        $content = Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group']);
-        $content.= Html::tag('button', $this->menuColumnsBtnLabel , ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
-        $content.= \yii\bootstrap\Dropdown::widget([
-            'items' => $items,
-            'options' => ['class' => 'dropdown-checkbox-content']
-        ]);
-        $content.= Html::endTag('div');
-
-        return $content;
-    }
-
-
 
 
 

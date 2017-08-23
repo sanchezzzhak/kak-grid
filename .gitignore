@@ -3,3 +3,4 @@ composer.lock
 vendor/
 tests/_output/*
 tests/_support/*
+robo.phar

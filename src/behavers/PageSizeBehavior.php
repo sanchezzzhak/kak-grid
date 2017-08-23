@@ -1,25 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: PHPdev
- * Date: 22.08.2017
- * Time: 19:23
- */
-
-namespace kak\widgets\grid;
-
-
+namespace kak\widgets\grid\behaviors;
+use yii\base\Behavior;
 use yii\helpers\Html;
 
-class PageSize extends \yii\base\Widget
+/**
+ * Class PageSizeBehavior
+ * @package kak\widgets\grid\behaviors
+ */
+class PageSizeBehavior extends Behavior
 {
+    /** @var $owner kak\widgets\grid\GridView  */
 
-    /**
-     * @var string the label text.
-     */
-    public $label = '';
-
-    /**
+    /*
      * @var integer the defualt page size. This page size will be used when the $_GET['per-page'] is empty.
      */
     public $defaultPageSize = 100;
@@ -40,46 +32,43 @@ class PageSize extends \yii\base\Widget
     /**
      * @var string the template to be used for rendering the output.
      */
-    public $template = '{list} {label}';
+    public $template = '{list}';
 
     /**
      * @var array the list of options for the drop down list.
      */
     public $options;
 
-    /**
-     * @var array the list of options for the label
-     */
-    public $labelOptions;
 
     /**
-     * @var boolean whether to encode the label text.
+    ```php
+    'behaviors' => [
+        [
+            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+            'toolbar' => [
+                [
+                    'content' => '{pagesize}' // attach behaver
+                ]
+            ]
+        ],[
+            'class' => \kak\widgets\grid\behaviors\PageSizeBehavior::className(),
+        ]
+    ],
+    ```
+     * render the output
      */
-    public $encodeLabel = true;
-
-    /**
-     * Runs the widget and render the output
-     */
-    public function run()
+    public function renderPageSize()
     {
-        if(empty($this->options['id'])) {
-            $this->options['id'] = $this->id;
-        }
-
-        if($this->encodeLabel) {
-            $this->label = Html::encode($this->label);
-        }
-
         $perPage = !empty($_GET[$this->pageSizeParam]) ? $_GET[$this->pageSizeParam] : $this->defaultPageSize;
 
         if(!isset($this->options['class'])){
-            Html::addCssClass($this->options, 'form-control input-sm');
+            Html::addCssClass($this->options, 'form-control');
         }
         $listHtml = Html::dropDownList($this->pageSizeParam, $perPage, $this->sizes, $this->options);
-        $labelHtml = Html::label($this->label, $this->options['id'], $this->labelOptions);
-        $output = str_replace(['{list}', '{label}'], [$listHtml, $labelHtml], $this->template);
-
+        $output = str_replace(['{list}'], [$listHtml], $this->template);
 
         return $output;
     }
+
+
 }
