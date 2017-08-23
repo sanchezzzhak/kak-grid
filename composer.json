@@ -17,7 +17,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "kak/datetimepicker" : "dev-master",
-        "boser-asset/jquery-resizable-columns" : "^0.2.3"
+        "boser-asset/jquery-resizable-columns" : ">=0.2.3"
     },
     "extra": {
         "asset-installer-paths": {
