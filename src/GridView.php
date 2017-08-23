@@ -67,7 +67,6 @@ class GridView extends \yii\grid\GridView
     
     public function run()
     {
-       // $this->prepareVisibilityColumns();
         echo Html::beginTag('div',['class' => 'kak-grid']);
 
         $behaviors = $this->getBehaviors();
