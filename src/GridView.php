@@ -18,9 +18,18 @@ use kak\widgets\grid\bundles\GridViewAsset;
  */
 class GridView extends \yii\grid\GridView
 {
+    const SORT_ARROW_DIRECTION = 'sort-direction';
+    const SORT_ARROW_ORDINAL = 'sort-ordinal';
+    const SORT_ARROW_NUMERICAL = 'sort-numerical';
+
+    public $sortArrow = false;
+
+    /**
+     * @var array
+     */
+    public $contentOptions = [];
 
     private $_behaviors = [];
-
     /**
      * Provide the option to be able to set behaviors on GridView configuration.
      * @param array $behaviors
@@ -62,13 +71,24 @@ class GridView extends \yii\grid\GridView
     public function init()
     {
         GridViewAsset::register($this->getView());
+        $this->initContainerOptions();
         parent::init();
     }
-    
+
+    public function initContainerOptions()
+    {
+        Html::addCssClass($this->contentOptions,'kak-grid');
+        if($this->sortArrow!=false){
+            Html::addCssClass($this->contentOptions, 'icon-sort');
+            if(is_string($this->sortArrow)){
+                Html::addCssClass($this->contentOptions, $this->sortArrow );
+            }
+        }
+    }
+
     public function run()
     {
-        echo Html::beginTag('div',['class' => 'kak-grid']);
-
+        echo Html::beginTag('div', $this->contentOptions);
         $behaviors = $this->getBehaviors();
         if (is_array($behaviors)) {
             foreach ($behaviors as $behavior) {
@@ -78,6 +98,7 @@ class GridView extends \yii\grid\GridView
             }
         }
         parent::run();
+
         echo Html::endTag('div');
     }
 
@@ -99,8 +120,6 @@ class GridView extends \yii\grid\GridView
         }
         return parent::renderSection($name);
     }
-
-
 
     /**
      * Renders the data models for the grid view.

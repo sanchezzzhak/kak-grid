@@ -35,3 +35,47 @@
 .kak-grid .date-filter-range .input-group {
     display: block;
 }*/
+
+.kak-grid.icon-sort a.asc:after, .kak-grid.icon-sort a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+.kak-grid.icon-sort a.asc:after {
+    content: "\e151";
+}
+
+.kak-grid.icon-sort a.desc:after {
+    content: "\e152";
+}
+
+.kak-grid.icon-sort.sort-direction a.asc:after {
+    content: "\e113";
+}
+
+.kak-grid.icon-sort.sort-direction a.desc:after {
+    content: "\e114";
+}
+
+.kak-grid.icon-sort.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.kak-grid.icon-sort.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.kak-grid.icon-sort.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.kak-grid.icon-sort.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
