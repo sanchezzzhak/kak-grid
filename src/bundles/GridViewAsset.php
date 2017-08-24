@@ -10,7 +10,8 @@ class GridViewAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/kak/grid/assets';
     public $depends = [
-        'yii\web\JqueryAsset'
+        'yii\web\JqueryAsset',
+        '\kak\widgets\grid\bundles\StoreJsAsset'
     ];
     public $js = [
         'kak.grid-view.js'
