@@ -59,11 +59,12 @@ class PageSizeBehavior extends Behavior
      */
     public function renderPageSize()
     {
+        $this->options['data-role'] = 'page-size';
         $perPage = !empty($_GET[$this->pageSizeParam]) ? $_GET[$this->pageSizeParam] : $this->defaultPageSize;
-
         if(!isset($this->options['class'])){
             Html::addCssClass($this->options, 'form-control');
         }
+
         $listHtml = Html::dropDownList($this->pageSizeParam, $perPage, $this->sizes, $this->options);
         $output = str_replace(['{list}'], [$listHtml], $this->template);
 

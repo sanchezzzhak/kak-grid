@@ -15,14 +15,22 @@
 }(this, function($) {
     'use strict';
 
+
+    var selectors = {
+        exportLinkFormat: '.export-link-format',
+        pageSizeControll: '[data-role="page-size"]'
+    };
+
+    var defaultOptions = {};
+
     // **********************************
     // Constructor
     // **********************************
     var kakGrid = function(element, options) {
         this.$parent = $(element)
-        var defaultOptions = {};
         this.options  = $.extend(defaultOptions,options);
 
+        /*
         this.$parent.find('.dropdown-checkbox-content').on('click.dropdown.data-api', function(e) {
             e.stopPropagation();
         });
@@ -48,6 +56,7 @@
             $target.closest('.column-filter-container').removeClass('open');
             this.$parent.find('.grid-view').yiiGridView('applyFilter');
         },this));
+        */
 
         this.$parent.find('.dropdown-checkbox-content a').on('click', $.proxy(function(e){
             e.preventDefault();
@@ -59,20 +68,26 @@
             }
         },this));
 
-        this.$parent.find('.pagination-size').on('change', $.proxy(function(e){
-            this._saveData();
-            location.reload();
-        },this));
+        // behavior export
+        this.$parent.on('click', selectors.exportLinkFormat, $.proxy(function (e) {
+            e.preventDefault();
+            var format = $(e.currentTarget).data('type');
 
+            console.log(format);
+        }, this))
 
     };
 
 
     kakGrid.prototype = {
         constructor: kakGrid,
+        exportTable: function(url, format) {
+
+        },
         // ----------------------------------
         // Methods to override
         // ----------------------------------
+
         _setCookie: function(key, value, days) {
             days  = days || 1;
             var e = new Date();
@@ -92,9 +107,7 @@
 
             var paginationSize =  this.$parent.find('.pagination-size').val();
             this._setCookie('kak-grid',JSON.stringify({paginationSize:paginationSize}),1);
-
-
-        }
+        },
     };
 
     $.fn.kakGrid = function(option) {

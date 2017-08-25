@@ -49,12 +49,6 @@ class GridView extends \yii\grid\GridView
     }
 
     /**
-     * @var null|string
-     */
-    public $tableWrapperClass = null;
-
-
-    /**
      * @var string
      */
     public $dataColumnClass = '\kak\widgets\grid\columns\DataColumn';
@@ -71,13 +65,14 @@ class GridView extends \yii\grid\GridView
     public function init()
     {
         GridViewAsset::register($this->getView());
+        Html::addCssClass($this->options, 'kak-grid');
         $this->initContainerOptions();
         parent::init();
     }
 
     public function initContainerOptions()
     {
-        Html::addCssClass($this->contentOptions,'kak-grid');
+
         if($this->sortArrow!=false){
             Html::addCssClass($this->contentOptions, 'icon-sort');
             if(is_string($this->sortArrow)){
@@ -98,7 +93,6 @@ class GridView extends \yii\grid\GridView
             }
         }
         parent::run();
-
         echo Html::endTag('div');
     }
 
@@ -121,35 +115,6 @@ class GridView extends \yii\grid\GridView
         return parent::renderSection($name);
     }
 
-    /**
-     * Renders the data models for the grid view.
-     * @return string
-     */
-    public function renderItems()
-    {
-        $caption = $this->renderCaption();
-        $columnGroup = $this->renderColumnGroup();
-        $tableHeader = $this->showHeader ? $this->renderTableHeader() : false;
-        $tableBody = $this->renderTableBody();
-
-        $tableFooter = $this->showFooter ? $this->renderTableFooter() : false;
-
-        $content = array_filter([
-            $caption,
-            $columnGroup,
-            $tableHeader,
-            $tableBody,
-            $tableFooter
-        ]);
-
-        $contentTable = Html::tag('table', implode("\n", $content), $this->tableOptions);
-
-        if (!is_null($this->tableWrapperClass)) {
-            $contentTable = Html::tag('div', $contentTable, ['class' => $this->tableWrapperClass]);
-        }
-
-        return $contentTable;
-    }
 
     const SUMMARY_SUM  = 'sum';
     const SUMMARY_COUNT = 'count';

@@ -62,7 +62,7 @@ class ExportTableBehavior extends Behavior
                 ],
                 'linkOptions' => [
                     'data-type' => $type,
-                    'class' => 'btn-da-exportable',
+                    'class' => 'export-link-format',
                 ]
             ];
         }
