@@ -1,12 +1,21 @@
 <?php
 namespace kak\widgets\grid\behaviors;
+use kak\widgets\grid\bundles\ExportTableAsset;
 use kak\widgets\grid\interfaces\ExportType;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 class ExportTableBehavior extends Behavior
 {
+
+
+    public $url = ['export'];
+
+    public $dropDownOptions = [];
+
+    public $renderType = '';
 
 
     /**
@@ -16,7 +25,7 @@ class ExportTableBehavior extends Behavior
             'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
             'toolbar' => [
                 [
-                    'content' => '{exporttable}' // attach behaver
+                    'content' => '{exporttable}' // attach behavior
                 ]
             ]
         ],[
@@ -35,7 +44,7 @@ class ExportTableBehavior extends Behavior
     public $types = [
         ExportType::CSV => 'CSV <span class="label label-default">.csv</span>',
         ExportType::XLSX => 'Excel 2007+ <span class="label label-default">.xlsx</span>',
-        ExportType::GOOGLE => 'Google Spreadsheet',
+        //ExportType::GOOGLE => 'Google Spreadsheet',
         ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
         ExportType::JSON => 'JSON <span class="label label-default">.json</span>',
         ExportType::XML => 'XML <span class="label label-default">.xml</span>',
@@ -44,21 +53,41 @@ class ExportTableBehavior extends Behavior
     ];
 
 
+    protected function processClearContent()
+    {
+        $this->processClearContent();
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+    }
+
+    protected function processExport()
+    {
+        if (\Yii::$app->request->post('export') == 1) {
+
+            exit;
+        }
+    }
+
     /**
      * Initializes the dropdown items
      */
     public function initButtonDropdown()
     {
+        $this->processExport();
+
         $dropdown = [
             'encodeLabels' => false
         ];
-
+        $hash = hash('crc32', $this->owner->getId() . 'export-table');
+        $dropdown['items'][] = '';
         foreach ($this->types as $type => $label) {
             $dropdown['items'][] = [
                 'label' => $label,
-                'url' => '#',
+                'url' => Url::to($this->url) . '?' . \Yii::$app->request->getQueryString(),
                 'options' => [
-                    'data-role' => 'grid-export'
+                    'data-role' => 'grid-export',
+                    'data-hash' => $hash,
                 ],
                 'linkOptions' => [
                     'data-type' => $type,
@@ -66,11 +95,16 @@ class ExportTableBehavior extends Behavior
                 ]
             ];
         }
-        return ButtonDropdown::widget([
+
+        $html = ButtonDropdown::widget([
             'encodeLabel' => false,
             'label' => '<i class="glyphicon glyphicon-export"></i> Export',
             'dropdown' => $dropdown,
+            'options' => $this->dropDownOptions
         ]);
+
+
+        return $html;
     }
 
 

@@ -18,7 +18,7 @@
 
     var selectors = {
         exportLinkFormat: '.export-link-format',
-        pageSizeControll: '[data-role="page-size"]'
+        pageSizeControl: '[data-role="page-size"]'
     };
 
     var defaultOptions = {};
@@ -58,22 +58,21 @@
         },this));
         */
 
-        this.$parent.find('.dropdown-checkbox-content a').on('click', $.proxy(function(e){
-            e.preventDefault();
-            var $target = $(e.currentTarget);
-            if(!$target.is('input')){
-                var $input = $target.find('input');
-                $input.prop( 'checked', !$input.prop('checked') );
-                inputChange = true;
-            }
-        },this));
+        // this.$parent.find('.dropdown-checkbox-content a').on('click', $.proxy(function(e){
+        //     e.preventDefault();
+        //     var $target = $(e.currentTarget);
+        //     if(!$target.is('input')){
+        //         var $input = $target.find('input');
+        //         $input.prop( 'checked', !$input.prop('checked') );
+        //         inputChange = true;
+        //     }
+        // },this));
 
         // behavior export
         this.$parent.on('click', selectors.exportLinkFormat, $.proxy(function (e) {
+            var el = $(e.currentTarget);
+            this.exportTableProcess('f'+ el.data('hash'), el.data('url'), el.data('type'));
             e.preventDefault();
-            var format = $(e.currentTarget).data('type');
-
-            console.log(format);
         }, this))
 
     };
@@ -81,33 +80,21 @@
 
     kakGrid.prototype = {
         constructor: kakGrid,
-        exportTable: function(url, format) {
-
+        createHideFrame: function(hash){
+            if (!$('#' + hash).length) {
+                $('<iframe/>', {name: hash, css: {'display': 'none'}}).appendTo('body');
+            }
         },
-        // ----------------------------------
-        // Methods to override
-        // ----------------------------------
-
-        _setCookie: function(key, value, days) {
-            days  = days || 1;
-            var e = new Date();
-            e.setTime(e.getTime() + (days * 864e5 ));
-            document.cookie = key + '=' + value +';path=/'+ ';expires=' + e.toUTCString();
-        },
-        _saveData: function(){
-            var $columns = [];
-            this.$parent.find('.dropdown-checkbox-content input').each(function(k,input){
-                $columns.push($(input).prop('checked')? 1 : 0);
-            });
-            var data = {
-                'columns': $columns
-            };
-            var key = 'kak-grid_' + (this.$parent.find('.grid-view').attr('id'));
-            this._setCookie(key, JSON.stringify(data),1);
-
-            var paginationSize =  this.$parent.find('.pagination-size').val();
-            this._setCookie('kak-grid',JSON.stringify({paginationSize:paginationSize}),1);
-        },
+        exportTableProcess: function(hash, url, type){
+            this.createHideFrame(hash);
+            $('<form/>', {'action': url, 'target': hash, 'method': 'post', css: {'display': 'none'}})
+                .append($('<input/>', {'name': 'type', 'value': type, 'type': 'hidden'}))
+                .append($('<input/>', {'name': 'export', 'value': 1, 'type': 'hidden'}))
+                .append($('<input/>', { 'name': yii.getCsrfParam() || '_csrf', 'value': yii.getCsrfToken(), 'type': 'hidden'}))
+                .appendTo('body')
+                .submit()
+                .remove();
+        }
     };
 
     $.fn.kakGrid = function(option) {
