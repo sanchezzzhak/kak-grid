@@ -6,17 +6,18 @@ use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use Yii;
 
 class ExportTableBehavior extends Behavior
 {
-
-
     public $url = ['export'];
 
     public $dropDownOptions = [];
 
-    public $renderType = '';
-
+    /**
+     * @var array is empty lisr then export all columns
+     */
+    public $exportColumns = [];
 
     /**
     ```php
@@ -42,30 +43,32 @@ class ExportTableBehavior extends Behavior
     }
 
     public $types = [
-        ExportType::CSV => 'CSV <span class="label label-default">.csv</span>',
-        ExportType::XLSX => 'Excel 2007+ <span class="label label-default">.xlsx</span>',
+        ExportType::CSV => 'CSV',
+        //ExportType::XLSX => 'Excel 2007+',
         //ExportType::GOOGLE => 'Google Spreadsheet',
-        ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
-        ExportType::JSON => 'JSON <span class="label label-default">.json</span>',
-        ExportType::XML => 'XML <span class="label label-default">.xml</span>',
-        ExportType::TXT => 'Text <span class="label label-default">.txt</span>',
-        ExportType::HTML => 'HTML  <span class="label label-default">.html</span>'
+        //ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
+        ExportType::JSON => 'JSON',
+        ExportType::XML => 'XML',
+        ExportType::TXT => 'Text',
+        ExportType::HTML => 'HTML',
+        ExportType::PDF => 'PDF'
     ];
 
 
-    protected function processClearContent()
+    /**
+     * run process export grid with dataProvider elements
+     */
+    protected function process()
     {
-        $this->processClearContent();
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
-    }
+        if (Yii::$app->request->post('export') == 1){
+            Yii::$app->response->clearOutputBuffers();
+            $type = Yii::$app->request->post('type', null);
 
-    protected function processExport()
-    {
-        if (\Yii::$app->request->post('export') == 1) {
-
-            exit;
+            $service = new \kak\widgets\grid\services\ExportService;
+            $service->grid = $this->owner;
+            $service->type = $type;
+            $service->exportColumns = $this->exportColumns;
+            $service->run();
         }
     }
 
@@ -74,7 +77,7 @@ class ExportTableBehavior extends Behavior
      */
     public function initButtonDropdown()
     {
-        $this->processExport();
+        $this->process();
 
         $dropdown = [
             'encodeLabels' => false
