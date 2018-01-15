@@ -29,15 +29,20 @@ class ExportService
         $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper));
 
         $write = $this->getWriter();
-        foreach ($source as $data){
-        
+        if($write!==null){
+            foreach ($source as $data){
+
+            }
         }
+
         \Yii::$app->end();
     }
 
 
     protected function getWriter()
     {
+        $adapters = [];
+
 
         return null;
     }
