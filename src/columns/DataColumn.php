@@ -4,9 +4,11 @@ namespace kak\widgets\grid\columns;
 
 use kak\widgets\grid\GridView;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 class DataColumn extends \yii\grid\DataColumn
 {
+
 
     /**
      * @var string|\Closure
@@ -38,6 +40,20 @@ class DataColumn extends \yii\grid\DataColumn
     ```
      */
     public $summary;
+
+    /** @var $grid \kak\widgets\grid\GridView */
+    public $grid;
+
+    public function renderHeaderCell()
+    {
+        $headerOptions = $this->headerOptions;
+        if ($headerOptions instanceof Closure || is_callable($headerOptions)) {
+            $options = call_user_func($headerOptions, $model, $key, $index, $this);
+        }else{
+            $options = $headerOptions;
+        }
+        return Html::tag('th', $this->renderHeaderCellContent(), $options);
+    }
 
     /**
      * Renders a data cell.
