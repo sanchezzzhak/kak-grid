@@ -8,7 +8,9 @@ interface ExportType
     const GOOGLE = 'spreadsheets';
     const ODS  = 'ods';
     const JSON = 'json';
+    const JSON_ROW = 'json-row';
     const XML  = 'xml';
     const TXT  = 'txt';
     const HTML = 'html';
+    const PDF = 'pdf';
 }

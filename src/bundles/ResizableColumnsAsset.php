@@ -2,6 +2,10 @@
 namespace kak\widgets\grid\bundles;
 use yii\web\AssetBundle;
 
+/**
+ * Class ResizableColumnsAsset
+ * @package kak\widgets\grid\bundles
+ */
 class ResizableColumnsAsset extends AssetBundle
 {
     public $sourcePath = '@vendor/bower/jquery-resizable-columns/dist';
