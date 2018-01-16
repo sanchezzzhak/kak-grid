@@ -44,14 +44,14 @@ class ExportTableBehavior extends Behavior
 
     public $types = [
         ExportType::CSV => 'CSV',
-        //ExportType::XLSX => 'Excel 2007+',
+        ExportType::XLSX => 'Excel 2007+',
         //ExportType::GOOGLE => 'Google Spreadsheet',
-        //ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
+        ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
         ExportType::JSON => 'JSON',
-        ExportType::XML => 'XML',
+        //ExportType::XML => 'XML',
         ExportType::TXT => 'Text',
-        ExportType::HTML => 'HTML',
-        ExportType::PDF => 'PDF'
+        //ExportType::HTML => 'HTML',
+        //ExportType::PDF => 'PDF'
     ];
 
 
