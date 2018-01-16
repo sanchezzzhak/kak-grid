@@ -48,7 +48,7 @@ class ExportTableBehavior extends Behavior
         //ExportType::GOOGLE => 'Google Spreadsheet',
         ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
         ExportType::JSON => 'JSON',
-        //ExportType::XML => 'XML',
+        ExportType::XML => 'XML',
         ExportType::TXT => 'TEXT',
         //ExportType::HTML => 'HTML',
         //ExportType::PDF => 'PDF'

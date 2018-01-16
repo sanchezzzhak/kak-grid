@@ -73,7 +73,7 @@ class ExportService
 
     protected function initColumnHeaderNamed()
     {
-        if($this->columnHeader === null && in_array($this->type,[ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])){
+        if(in_array($this->type,[ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])){
             $this->columnHeader = false;
         }else if($this->columnHeader === null){
             $this->columnHeader = true;
