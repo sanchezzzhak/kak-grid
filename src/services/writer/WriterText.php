@@ -3,7 +3,7 @@
 namespace kak\widgets\grid\services\writer;
 use Box\Spout\Writer\CSV\Writer;
 
-class TextWriter extends Writer
+class WriterText extends Writer
 {
     /**
      * @var string Content-Type value for the header

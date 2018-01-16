@@ -1,6 +1,7 @@
 <?php
 namespace  kak\widgets\grid\services;
 
+use kak\widgets\grid\interfaces\ExportType;
 use kak\widgets\grid\iterators\DataProviderBatchIterator;
 use kak\widgets\grid\iterators\SourceIterator;
 use kak\widgets\grid\mappers\ColumnMapper;
@@ -20,7 +21,8 @@ class ExportService
     public $grid;
     public $type;
     public $exportColumns;
-
+    public $columnRemoveHtml = true;
+    public $columnHeader = null;
 
     public function run()
     {
@@ -30,17 +32,19 @@ class ExportService
             throw new HttpException(403, $e->getMessage());
         }
 
+        $this->initColumnHeaderNamed();
+
         /** @var BaseDataProvider $dataProvider */
         $dataProvider = $this->grid->dataProvider;
-        $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, true);
+
+        $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader);
         $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper));
 
-        $this->clearBuffers();
         $writer->openToBrowser($this->getFileName());
 
-//        if ($model !== null && !in_array($type, [TypeHelper::JSON, TypeHelper::XML])) {
-//            $writer->addRow($mapper->getHeaders($model));
-//        }
+        if (!in_array($this->type, [ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])) {
+            $writer->addRow($mapper->getHeaders());
+        }
         foreach ($source as $data){
             $writer->addRow($data);
         }
@@ -53,7 +57,10 @@ class ExportService
      */
     protected function getFileName()
     {
-        $type = $this->type;
+        $types = [
+            ExportType::JSON_ROW => 'json',
+        ];
+        $type = isset($types[$this->type]) ? $types[$this->type] : $this->type;
         return Yii::$app->controller->id . '-' . Yii::$app->controller->action->id  . '-' . date('Y-m-d-Hi') . '.' . $type;
     }
 
@@ -63,13 +70,13 @@ class ExportService
         return writer\WriterFactory::create($this->type);
     }
 
-    /**
-     * Clean (erase) the output buffers and turns off output buffering
-     */
-    protected function clearBuffers()
+
+    protected function initColumnHeaderNamed()
     {
-        while (ob_get_level() > 0) {
-            ob_end_clean();
+        if($this->columnHeader === null && in_array($this->type,[ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])){
+            $this->columnHeader = false;
+        }else if($this->columnHeader === null){
+            $this->columnHeader = true;
         }
     }
 

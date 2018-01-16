@@ -12,10 +12,10 @@ class WriterFactory extends \Box\Spout\Writer\WriterFactory
         switch($writerType){
             case 'json': $writer = new WriterJson; break;
             case 'text': $writer = new WriterText; break;
-            case 'xml': break;
+//            case 'xml': break;
 //            case 'pdf': break;
 //            case 'txt': break;
-            default: parent::create($writerType);
+            default: return parent::create($writerType);
         }
         $writer->setGlobalFunctionsHelper(new GlobalFunctionsHelper());
         return $writer;

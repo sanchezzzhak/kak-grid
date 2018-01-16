@@ -13,13 +13,29 @@ class ColumnMapper
     private $columns = [];
     private $exportColumns = [];
     private $removeHtml = true;
+    private $columnHeader = true;
 
-    public function __construct($columns, $exportColumns, $removeHtml)
+    public function __construct($columns, $exportColumns, $removeHtml, $columnHeader)
     {
         $this->columns = $columns;
         $this->exportColumns = $exportColumns;
         $this->removeHtml = $removeHtml;
+        $this->columnHeader = $columnHeader;
     }
+
+
+    public function getHeaders()
+    {
+        $headers = [];
+        /** @var DataColumn $column */
+        foreach ($this->columns as $column) {
+            if ($this->isColumnExportable($column)) {
+                $headers[] = $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
+            }
+        }
+        return $headers;
+    }
+
 
     /**
      * @param $model
@@ -35,8 +51,9 @@ class ColumnMapper
                 $key = $model instanceof ActiveRecordInterface
                     ? $model->getPrimaryKey()
                     : $model[$column->attribute];
+
                 $value = $this->getColumnValue($column, $model, $key, $index);
-                $header = $this->getColumnHeader($column);
+                $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
                 $row[$header] = $value;
             }
         }
@@ -54,7 +71,7 @@ class ColumnMapper
     protected function getColumnValue($column, $model, $key, $index)
     {
         $value = $column->renderDataCell($model, $key, $index);
-        return ($this->removeHtml) ? strip_tags($value) : $value;
+        return trim(($this->removeHtml) ? strip_tags($value) : $value);
     }
 
     /**
@@ -64,7 +81,7 @@ class ColumnMapper
     protected function getColumnHeader($column)
     {
         $value = $column->renderHeaderCell();
-        return ($this->removeHtml) ? strip_tags($value) : $value;
+        return trim(($this->removeHtml) ? strip_tags($value) : $value);
     }
 
     /**
