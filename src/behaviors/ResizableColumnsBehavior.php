@@ -4,19 +4,26 @@ namespace kak\widgets\grid\behaviors;
 use yii\base\Behavior;
 use yii\helpers\Json;
 
+/**
+ * Class ResizableColumnsBehavior
+ * @package kak\widgets\grid\behaviors
+ *
+
+ */
 class ResizableColumnsBehavior extends Behavior
 {
     /**
      * @var array
+     * ```php
+       [
+        'selector' => new JsExpression('function selector($table) {... see js code ...}'),
+        'store' => new JsExpression('window.store'),
+        'syncHandlers' => true,
+        'resizeFromBody' => true,
+        'maxWidth' => new JsExpression('null'),
+        'minWidth' => 20
+       ]
      * ```
-     * [
-     *  'selector' => new JsExpression('function selector($table) {... see js code ...}'),
-     *  'store' => new JsExpression('window.store'),
-     *  'syncHandlers' => true,
-     *  'resizeFromBody' => true,
-     *  'maxWidth' => new JsExpression('null'),
-     *  'minWidth' => 20
-     * ]
      */
     public $clientOptions = [];
 

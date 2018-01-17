@@ -22,6 +22,9 @@ class GridView extends \yii\grid\GridView
     const SORT_ARROW_ORDINAL = 'sort-ordinal';
     const SORT_ARROW_NUMERICAL = 'sort-numerical';
 
+    /**
+     * @var bool show direct sorted column up/down
+     */
     public $sortArrow = false;
 
     /**
@@ -41,7 +44,7 @@ class GridView extends \yii\grid\GridView
 
     /**
      * get behaviors
-     * @param array $behaviors
+     * @return array
      */
     public function behaviors()
     {
@@ -52,6 +55,7 @@ class GridView extends \yii\grid\GridView
      * @var string
      */
     public $dataColumnClass = '\kak\widgets\grid\columns\DataColumn';
+
     /**
      * @var string
      */
@@ -70,9 +74,9 @@ class GridView extends \yii\grid\GridView
         parent::init();
     }
 
+
     public function initContainerOptions()
     {
-
         if($this->sortArrow!=false){
             Html::addCssClass($this->contentOptions, 'icon-sort');
             if(is_string($this->sortArrow)){
@@ -80,6 +84,7 @@ class GridView extends \yii\grid\GridView
             }
         }
     }
+
 
     public function run()
     {
@@ -116,17 +121,21 @@ class GridView extends \yii\grid\GridView
     }
 
 
+    // deprecated block remove next version --->
     const SUMMARY_SUM  = 'sum';
     const SUMMARY_COUNT = 'count';
     const SUMMARY_AVG = 'avg';
     const SUMMARY_MAX = 'max';
     const SUMMARY_MIN = 'min';
+
     /**
      * @param $data
+     * @param $attribute
      * @param $type
      * @return number|string
+     * @deprecated remove next version and remove constant SUMMARY_*
      */
-    public static function footerSummary($data,$attribute,$type)
+    public static function footerSummary($data, $attribute, $type)
     {
         $data = ArrayHelper::getColumn($data, $attribute);
         switch ($type) {
@@ -143,6 +152,5 @@ class GridView extends \yii\grid\GridView
         }
         return '';
     }
-
-
+    // deprecated block remove next version <---
 } 

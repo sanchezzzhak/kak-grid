@@ -12,27 +12,28 @@ use yii\helpers\Html;
 /**
  * Class MenuColumnsBehavior
  * @package kak\widgets\grid\behaviors
- * @property $owner \kak\widgets\grid\GridView
+     * @property $owner \kak\widgets\grid\GridView
+ *
+ * ```php
+    'behaviors' => [
+        [
+            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+            'toolbar' => [
+                [
+                '   content' => '{MenuColumns}' // attach behavior MenuColumnsBehavior
+                ]
+            ]
+        ],[
+        'class' => \kak\widgets\grid\behaviors\MenuColumnsBehavior::className(),
+        ]
+    ],
+ * ```
  */
 class MenuColumnsBehavior extends Behavior
 {
     public $label = 'show/hide columns';
 
     /**
-     * ```php
-     * 'behaviors' => [
-     * [
-     * 'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-     * 'toolbar' => [
-     * [
-     * 'content' => '{MenuColumns}' // attach behaver
-     * ]
-     * ]
-     * ],[
-     * 'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
-     * ]
-     * ],
-     * ```
      * render the output
      */
     public function renderMenuColumns()

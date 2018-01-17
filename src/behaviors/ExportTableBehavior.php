@@ -1,18 +1,32 @@
 <?php
 namespace kak\widgets\grid\behaviors;
-use kak\widgets\grid\bundles\ExportTableAsset;
 use kak\widgets\grid\interfaces\ExportType;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
-use yii\helpers\Html;
 use yii\helpers\Url;
 use Yii;
 
+/**
+ * Class ExportTableBehavior
+ * @package kak\widgets\grid\behaviors
+ *
+ * ```php
+    'behaviors' => [
+        [
+            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+            'toolbar' => [
+                [ 'content' => '{exporttable}'  ] // attach ExportTableBehavior
+            ]
+        ]
+        ],[
+            'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
+        ]
+    ],
+ * ```
+ */
 class ExportTableBehavior extends Behavior
 {
-    public $url = ['export'];
-
-    public $dropDownOptions = [];
+     public $dropDownOptions = [];
 
     /**
      * @var array is empty lisr then export all columns
@@ -20,20 +34,6 @@ class ExportTableBehavior extends Behavior
     public $exportColumns = [];
 
     /**
-    ```php
-    'behaviors' => [
-        [
-            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-            'toolbar' => [
-                [
-                    'content' => '{exporttable}' // attach behavior
-                ]
-            ]
-        ],[
-            'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
-        ]
-    ],
-    ```
      * render the output
      */
     public function renderExportTable()
@@ -42,11 +42,14 @@ class ExportTableBehavior extends Behavior
         return $output;
     }
 
+    /**
+     * @var array format support export
+     */
     public $types = [
         ExportType::CSV => 'CSV',
         ExportType::XLSX => 'Excel 2007+',
-        //ExportType::GOOGLE => 'Google Spreadsheet',
-        ExportType::ODS => 'Open Document Spreadsheet <span class="label label-default">.ods</span>',
+        ExportType::GOOGLE => 'Google Spreadsheet',
+        ExportType::ODS => 'Open Document Spreadsheet',
         ExportType::JSON => 'JSON',
         ExportType::XML => 'XML',
         ExportType::TXT => 'TEXT',

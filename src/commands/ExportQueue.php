@@ -6,6 +6,11 @@
  * Time: 19:58
  */
 
+/**
+ * Class ExportQueue
+ * background job export table
+ * procession next version;
+ */
 class ExportQueue extends \yii\base\Component implements \yii\queue\JobInterface
 {
     public $grid;

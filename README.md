@@ -1,96 +1,89 @@
-<!-- # kak-grid
-Grid, TreeGrid widgets for Yii2
-
-Preview
------------
-<img src="https://lh3.googleusercontent.com/-ViaLrNwzD_8/Vb9fHnWvtPI/AAAAAAAAAEQ/sFC83sEAMhY/s480-Ic42/kakGridPreview.png">
-Installation
+GridView widgets for Yii2
 ------------
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
 Either run
 
 ```
-php composer.phar require --prefer-dist kak/grid "dev-master"
+php composer.phar require --prefer-dist kak/grid "*"
 ```
-
-or add
-
-```
-"kak/grid": "dev-master"
-```
-
-to the require section of your `composer.json` file.
 
 Usage
------
+-
 Once the extension is installed, simply use it in your code by  :
 ```php
-     <?php use kak\widgets\grid\GridView; ?>
-     <?=GridView::widget([
-          'paginationPageSize' => [20,50,100], // is empty array hide control
-          'menuControl' =>  true,   // Show menu control
-          'menuColumnsBtnLabel' => 'Show / hide columns',
-          'tableWrapperClass' => 'table table-responsive', // Wrapper class for table, if not defined not rendered.
-          'showFooter' => true,
-          'toolbar' => [
-            'default' => ''
-          ], // or string  ''
-          'dataProvider' => $provider,
-          'columns' => [
-              'stream_id' => [
-                  'header' => 'Stream',
-                  'format' => 'html',
-                  'value'  => function($data){
-                      return '[' . $data->stream_id . '] '. Html::a($data->stream->name,['stream/update', 'id' => $data->stream->id ]);
-                  }
-              ],
-              'date_key',
-              'os',
-              'browser',
-              'operator_id' => [
-                  'header' => 'Operator',
-                  'value' => 'operator.name'
-              ],
-              'country_id' => [
-                  'header' => 'Country',
-                  'format' => 'html',
-                  'value'  => function($data){
-                      return Html::img($data->country->flag_url,['title' => $data->country->name_ru]);
-                  },
-                 'footer' =>  '<b>Total redirect</b>',
-              ],
-              'view_count' => [
-                  'attribute' => 'view_count',
-                  'footer'    => GridView::footerSummary($provider->models,'view_count',GridView::SUMMARY_SUM),   // helper calculating function
-              ],
-              'redirect_count' => [
-                  'attribute' => 'redirect_count',
-                  'footer'    => GridView::footerSummary($provider->models,'redirect_count',GridView::SUMMARY_SUM),
-              ],
-              'ratio (redirect/view)' => [
-                  'header' => 'Ratio',
-                  'value' =>  function($data){
-                      return round( (int)$data->redirect_count/(int)$data->view_count ,2);
-                  }
-              ],
-              'actions' => [
-                  'class' => \yii\grid\ActionColumn::className(),
-                  'template' => '{view}',
-                  'options' => [
-                      'menu' => false    // Hiding in the menu list
-                  ]
-              ],
-          ]
-      ])?>
+<?php
+  use kak\widgets\grid\GridView; 
+  use yii\helpers\Html;
+  
+echo GridView::widget([
+    'showFooter' => true,
+    'dataProvider' => $provider,
+    'columns' => [
+      'user' => [
+          'header' => 'user',
+          'format' => 'html',
+          'value'  => function($data){
+              return '[' . $data->stream_id . '] '
+              .  Html::a($data->user->name,['user/update', 'id' => $data->user->id ]);
+          }
+      ],
+      'date_key',
+      'os',
+      'browser',
+      'operator_id' => [
+          'header' => 'Operator',
+          'value' => 'operator.name'
+      ],
+      'country_id' => [
+          'header' => 'Country',
+          'format' => 'html',
+          'value'  => function($data){
+              return Html::img($data->country->flag_url,['title' => $data->country->name_ru]);
+          },
+         'footer' =>  '<b>Total redirect</b>',
+      ],
+      'view_count' => [
+          'attribute' => 'view_count',
+          'summary' => 'sum'
+      ],
+      'redirect_count' => [
+          'attribute' => 'redirect_count',
+          'summary' => 'sum'
+      ],
+      'ratio (redirect/view)' => [
+          'header' => 'Ratio',
+          'value' =>  function($data){
+              return round( (int)$data->redirect_count/(int)$data->view_count ,2);
+          }
+      ],
+      'actions' => [
+          'class' => \yii\grid\ActionColumn::className(),
+          'template' => '{view}',
+      ],
+    ]
+])?>
 ```
 
-## options widget
- `paginationPageSize`  array  dropdown control, if empty list the hide control
- `menuColumns`  Show/hide menu control
- `menuColumnsBtnLabel` 
--->
 
+Column types
+-
+* [DataColumn](docs/columns/data-column.md) ( support editable in processing)
+* [LabelColumn](docs/columns/label-column.md)
+* [SwapColumn](docs/columns/swap-column.md)  ( in processing )
+* [CheckboxColumn](docs/columns/checkbox-column.md) ( in processing )
+
+Behaviors
+-
+* [ToolBarBehavior](docs/behaviors/toolbar-behavior.md) (base attach old beg panel plugins)
+* [ExportTableBehavior](docs/behaviors/export-table-behavior.md) (export popular format json, csv, excel)
+* [MenuColumnsBehavior](docs/behaviors/menu-column-behavior.md)  ( in processing )
+* [PageSizeBehavior](docs/behaviors/page-size-behavior.md)
+* AutoFilterBehavior ( in processing )
+* [ResizableColumnsBehavior](docs/behaviors/resizable-columns-behavior.md)
+    
+    
+<!--    
 ## test configuration
 ```
 cd project_dir 
@@ -100,3 +93,4 @@ cd project_dir/vendor/kak/grid
 php -f ../../../codecept.phar bootstrap
 php -f ../../../codecept.phar build
 ```
+-->

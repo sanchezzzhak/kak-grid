@@ -17,7 +17,6 @@
     "require": {
         "yiisoft/yii2": "*",
         "yiisoft/yii2-queue": "~2.0.1",
-        "kak/datetimepicker" : "dev-master",
         "box/spout" : "2.7.3",
         "bower-asset/jquery-resizable-columns" : "^0.2.3",
         "bower-asset/store.js": "~2.0"

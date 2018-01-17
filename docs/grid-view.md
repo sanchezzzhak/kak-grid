@@ -4,38 +4,15 @@
 
 Class GridView
 @package kak\widgets\grid
+@property $behaviors;
 
-#### *public* paginationPageSizer array dropdown select, select size page grid */
-#### *public* defaulPageSize@var int default value page size
-@see GridView::renderPageSize() for details see method
+#### *public* sortArrow@var bool show direct sorted column up/down
 
-#### *public* tableWrapperClass@var null|string
+#### *public* contentOptions@var array
 
-#### *public* showMenuColumn@var bool show controll show/hide columns
+#### *public* dataColumnClass@var string
 
-#### *public* showPageSizer bool show controll page size */
-#### *public* toolbar@var array settings grid to add different controllers or actions
--  available plaseholdes:
-- `{pageSize}`: the summary section. See [[renderPageSize()]].
-- `{menu}`: the summary section. See [[renderMenu()]].
-- `{actions}`: the summary section. See [[renderActions()]].
-
-```
-
-```
-
-#### *public* dataColumnClass@var string the default data column class if the class name is not explicitly specified when configuring a data column.
-@see \kak\widgets\grid\DataColumn.
-
-#### *public* layout@var string the layout that determines how different sections of the list view should be organized.
-The following tokens will be replaced with the corresponding section contents:
-
-- `{toolbar}`: the summary section. See [[renderToolbar()]].
-- `{summary}`: the summary section. See [[renderSummary()]].
-- `{errors}`: the filter model error summary. See [[renderErrors()]].
-- `{items}`: the list items. See [[renderItems()]].
-- `{sorter}`: the sorter. See [[renderSorter()]].
-- `{pager}`: the pager. See [[renderPager()]].
+#### *public* layout@var string
 
 #### *public* caption@var string the caption of the grid table
 @see captionOptions
@@ -226,53 +203,40 @@ The "tag" element specifies the tag name of the emptyText element and defaults t
 #### *public static* stack@var Widget[] the widgets that are currently being rendered (not ended). This property
 is maintained by [[begin()]] and [[end()]] methods.
 @internal
+#### setBehaviors() 
+Provide the option to be able to set behaviors on GridView configuration.
+ * `param array` $behaviors
+
+#### behaviors() 
+get behaviors
+@return array
+
 #### init() 
 Initializes the object.
 This method is invoked at the end of the constructor after the object is initialized with the
 given configuration.
 
+#### initContainerOptions() 
 #### run() 
 Executes the widget.
 @return string the result of widget execution to be outputted.
 
-#### renderActions() 
-#### renderPageSize() 
 #### renderSection() 
 @inheritdoc
 
-#### renderTableHeader() 
-Renders the table header.
-@return string the rendering result.
-
-#### renderTableRow() 
-Renders a table row with the given data model and key.
- * `param mixed` $model the data model to be rendered
- * `param mixed` $key the key associated with the data model
- * `param integer` $index the zero-based index of the data model among the model array returned by [[dataProvider]].
-@return string the rendering result
-
-#### getPaginationSize() 
-#### renderMenu() 
-#### renderTableFooter() 
-Renders the table footer.
-@return string the rendering result.
-
-#### renderFilters() 
-Renders the filter.
-@return string the rendering result.
-
-#### renderItems() 
-Renders the data models for the grid view.
-@return string
-
 #### footerSummary() 
  * `param` $data
+ * `param` $attribute
  * `param` $type
 @return number|string
+@deprecated remove next version and remove constant SUMMARY_*
 
 #### renderErrors() 
 Renders validator errors of filter model.
 @return string the rendering result.
+
+#### renderItems() 
+Renders the data models for the grid view.
 
 #### renderCaption() 
 Renders the caption element.
@@ -282,9 +246,28 @@ Renders the caption element.
 Renders the column group HTML.
 @return bool|string the column group HTML or `false` if no column group should be rendered.
 
+#### renderTableHeader() 
+Renders the table header.
+@return string the rendering result.
+
+#### renderTableFooter() 
+Renders the table footer.
+@return string the rendering result.
+
+#### renderFilters() 
+Renders the filter.
+@return string the rendering result.
+
 #### renderTableBody() 
 Renders the table body.
 @return string the rendering result.
+
+#### renderTableRow() 
+Renders a table row with the given data model and key.
+ * `param mixed` $model the data model to be rendered
+ * `param mixed` $key the key associated with the data model
+ * `param int` $index the zero-based index of the data model among the model array returned by [[dataProvider]].
+@return string the rendering result
 
 #### renderEmpty() 
 Renders the HTML content indicating that the list view has no data.
@@ -348,6 +331,7 @@ Sets the view object to be used by this widget.
 
 #### render() 
 Renders a view.
+
 The view to be rendered can be specified in one of the following formats:
 
 - [path alias](guide:concept-aliases) (e.g. "@app/views/site/index");
@@ -424,6 +408,7 @@ public function afterRun($result)
 
 #### __get() 
 Returns the value of a component property.
+
 This method will check in the following order and act accordingly:
 
  - a property defined by a getter: return the getter result
@@ -439,6 +424,7 @@ will be implicitly called when executing `$value = $component->property;`.
 
 #### __set() 
 Sets the value of a component property.
+
 This method will check in the following order and act accordingly:
 
  - a property defined by a setter: set the property value
@@ -456,6 +442,7 @@ will be implicitly called when executing `$component->property = $value;`.
 
 #### __isset() 
 Checks if a property is set, i.e. defined and not null.
+
 This method will check in the following order and act accordingly:
 
  - a property defined by a setter: return whether the property is set
@@ -470,6 +457,7 @@ will be implicitly called when executing `isset($component->property)`.
 
 #### __unset() 
 Sets a component property to be null.
+
 This method will check in the following order and act accordingly:
 
  - a property defined by a setter: set the property value to be null
@@ -500,6 +488,7 @@ It removes all behaviors because they are attached to the old object.
 
 #### hasProperty() 
 Returns a value indicating whether a property is defined for this component.
+
 A property is defined if:
 
 - the class has a getter or setter method associated with the specified name
@@ -516,6 +505,7 @@ A property is defined if:
 
 #### canGetProperty() 
 Returns a value indicating whether a property can be read.
+
 A property can be read if:
 
 - the class has a getter method associated with the specified name
@@ -531,6 +521,7 @@ A property can be read if:
 
 #### canSetProperty() 
 Returns a value indicating whether a property can be set.
+
 A property can be written if:
 
 - the class has a setter method associated with the specified name
@@ -546,6 +537,7 @@ A property can be written if:
 
 #### hasMethod() 
 Returns a value indicating whether a method is defined.
+
 A method is defined if:
 
 - the class has a method with the specified name
@@ -554,31 +546,6 @@ A method is defined if:
  * `param string` $name the property name
  * `param bool` $checkBehaviors whether to treat behaviors' methods as methods of this component
 @return bool whether the method is defined
-
-#### behaviors() 
-Returns a list of behaviors that this component should behave as.
-
-Child classes may override this method to specify the behaviors they want to behave as.
-
-The return value of this method should be an array of behavior objects or configurations
-indexed by behavior names. A behavior configuration can be either a string specifying
-the behavior class or an array of the following structure:
-
-```php
-'behaviorName' => [
-    'class' => 'BehaviorClass',
-    'property1' => 'value1',
-    'property2' => 'value2',
-]
-```
-
-Note that a behavior class must extend from [[Behavior]]. Behaviors can be attached using a name or anonymously.
-When a name is used as the array key, using this name, the behavior can later be retrieved using [[getBehavior()]]
-or be detached using [[detachBehavior()]]. Anonymous behaviors can not be retrieved or detached.
-
-Behaviors declared in this method will be attached to the component automatically (on demand).
-
-@return array the behavior configurations.
 
 #### hasEventHandlers() 
 Returns a value indicating whether there is any handler attached to the named event.
@@ -680,6 +647,7 @@ Returns the fully qualified name of this class.
 
 #### __construct() 
 Constructor.
+
 The default implementation does two things:
 
 - Initializes the object with the given configuration `$config`.

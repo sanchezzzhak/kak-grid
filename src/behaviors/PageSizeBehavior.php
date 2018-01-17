@@ -6,13 +6,28 @@ use yii\helpers\Html;
 /**
  * Class PageSizeBehavior
  * @package kak\widgets\grid\behaviors
+ *
+ * ```php
+    'behaviors' => [
+        [
+            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+            'toolbar' => [
+             [
+                'content' => '{pagesize}' // attach behavior PageSizeBehavior
+             ]
+        ]
+        ],[
+            'class' => \kak\widgets\grid\behaviors\PageSizeBehavior::className(),
+        ]
+    ],
+ * ```
  */
 class PageSizeBehavior extends Behavior
 {
-    /** @var $owner kak\widgets\grid\GridView  */
+    /** @var $owner \kak\widgets\grid\GridView  */
 
-    /*
-     * @var integer the defualt page size. This page size will be used when the $_GET['per-page'] is empty.
+    /**
+     * @var integer the default page size. This page size will be used when the $_GET['per-page'] is empty.
      */
     public $defaultPageSize = 100;
 
@@ -41,20 +56,6 @@ class PageSizeBehavior extends Behavior
 
 
     /**
-    ```php
-    'behaviors' => [
-        [
-            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-            'toolbar' => [
-                [
-                    'content' => '{pagesize}' // attach behaver
-                ]
-            ]
-        ],[
-            'class' => \kak\widgets\grid\behaviors\PageSizeBehavior::className(),
-        ]
-    ],
-    ```
      * render the output
      */
     public function renderPageSize()

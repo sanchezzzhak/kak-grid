@@ -3,52 +3,58 @@ namespace kak\widgets\grid\columns;
 
 
 use kak\widgets\grid\GridView;
+use kak\widgets\grid\helpers\GridHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
+/**
+ * Class DataColumn
+ * @package kak\widgets\grid\columns
+ *
+ * @see \kak\widgets\grid\helpers\GridHelper::SUMMARY_SUM
+ * @see \kak\widgets\grid\helpers\GridHelper::SUMMARY_COUNT
+ * @see \kak\widgets\grid\helpers\GridHelper::SUMMARY_AVG
+ * @see \kak\widgets\grid\helpers\GridHelper::SUMMARY_MAX
+ * @see \kak\widgets\grid\helpers\GridHelper::SUMMARY_MIN
+ *
+ * ```php
+    // base
+    echo \kak\widgets\grid\GridView::widget([
+        'columns' => [
+            'hits_sum' => [
+                'format' => ['decimal', 2]
+                'attribute' => 'hits_sum',
+                'summary' => 'sum'
+            ]
+    ]
+    ])
+    // set custom summary function
+    echo \kak\widgets\grid\GridView::widget([
+        'columns' => [
+            'hits_sum' => [
+                'attribute' => 'hits_sum',
+                'summary' => function($models, $column){}
+            ]
+        ]
+    ])
+ * ```
+ */
 class DataColumn extends \yii\grid\DataColumn
 {
 
-
     /**
      * @var string|\Closure
-     * @see \kak\widgets\grid\GridView::SUMMARY_SUM
-     * @see \kak\widgets\grid\GridView::SUMMARY_COUNT
-     * @see \kak\widgets\grid\GridView::SUMMARY_AVG
-     * @see \kak\widgets\grid\GridView::SUMMARY_MAX
-     * @see \kak\widgets\grid\GridView::SUMMARY_MIN
-     * @example
-     * ```php
-        echo \kak\widgets\grid\GridView::widget([
-            'columns' => [
-                'hits_sum' => [
-                    'format' => ['decimal', 2]
-                    'attribute' => 'hits_sum',
-                    'summary' => 'sum'
-                ]
-            ]
-        ])
-        echo \kak\widgets\grid\GridView::widget([
-            'columns' => [
-                'hits_sum' => [
-                    'attribute' => 'hits_sum',
-                    'summary' => function($models, $column){}
-                ]
-            ]
-        ])
-    function($models, $column){}
-    ```
      */
     public $summary;
 
-    /** @var $grid \kak\widgets\grid\GridView */
+    /** @var \kak\widgets\grid\GridView */
     public $grid;
 
     public function renderHeaderCell()
     {
         $headerOptions = $this->headerOptions;
-        if ($headerOptions instanceof Closure || is_callable($headerOptions)) {
-            $options = call_user_func($headerOptions, $model, $key, $index, $this);
+        if ($headerOptions instanceof \Closure || is_callable($headerOptions)) {
+            $options = call_user_func($headerOptions, $this);
         }else{
             $options = $headerOptions;
         }
@@ -65,12 +71,12 @@ class DataColumn extends \yii\grid\DataColumn
     public function renderDataCell($model, $key, $index)
     {
         // temp fix;
-        if ($this->contentOptions instanceof Closure || is_callable($this->contentOptions)) {
+        if ($this->contentOptions instanceof \Closure || is_callable($this->contentOptions)) {
             $options = call_user_func($this->contentOptions, $model, $key, $index, $this);
         } else {
             $options = $this->contentOptions;
         }
-        return parent::renderDataCell($model, $key, $index);
+        return Html::tag('td', $this->renderDataCellContent($model, $key, $index), $options);
     }
 
 
@@ -92,15 +98,15 @@ class DataColumn extends \yii\grid\DataColumn
     }
 
     /**
-     * get cell summary value
+     * get cell summary column values
      * @return null|number
      */
     public function getFooterCellSummary()
     {
-        if ($this->summary instanceof Closure || is_callable($this->summary)) {
-            return call_user_func($this->footerSummer, $this->grid->dataProvider->getModels(), $this);
+        if ($this->summary instanceof \Closure || is_callable($this->summary)) {
+            return call_user_func($this->summary, $this->grid->dataProvider->getModels(), $this);
         } else if (!empty($this->summary)) {
-            return GridView::footerSummary($this->grid->dataProvider->getModels(), $this->attribute, $this->summary);
+            return GridHelper::summary($this->grid->dataProvider->getModels(), $this->attribute, $this->summary);
         }
         return null;
     }

@@ -26,7 +26,7 @@ use yii\bootstrap\ButtonGroup;
  */
 class ToolBarBehavior extends Behavior
 {
-    /** @var $owner kak\widgets\grid\GridView  */
+    /** @var $owner \kak\widgets\grid\GridView  */
 
     public $toolbar = [];
 
