@@ -1,6 +1,8 @@
 <?php
 namespace kak\widgets\grid\behaviors;
+use kak\widgets\grid\GridView;
 use yii\base\Behavior;
+use yii\data\Pagination;
 use yii\helpers\Html;
 
 /**
@@ -55,6 +57,23 @@ class PageSizeBehavior extends Behavior
     public $options;
 
 
+    public function run(){
+
+        /** @var GridView $owner */
+        $owner = $this->owner;
+
+        // set selector filters
+        $selector = ' #'.$owner->id . ' select[name="per-page"]';
+        $filters = explode(',', $owner->filterSelector);
+        if (!in_array($selector, $filters)) {
+            $filters[] = $selector;
+            $owner->filterSelector = implode(',', array_filter($filters, function ($val) {
+                return !empty($val);
+            }));
+        }
+    }
+
+
     /**
      * render the output
      */
@@ -65,7 +84,6 @@ class PageSizeBehavior extends Behavior
         if(!isset($this->options['class'])){
             Html::addCssClass($this->options, 'form-control');
         }
-
         $listHtml = Html::dropDownList($this->pageSizeParam, $perPage, $this->sizes, $this->options);
         $output = str_replace(['{list}'], [$listHtml], $this->template);
 

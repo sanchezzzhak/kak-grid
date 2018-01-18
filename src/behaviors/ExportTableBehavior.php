@@ -14,7 +14,13 @@ use Yii;
         [
             'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
             'toolbar' => [
-                [ 'content' => '{exporttable}'  ] // attach ExportTableBehavior
+                [
+                    // attach ExportTableBehavior placeholder
+                    'content' => '<div class="form-group">'
+                        . '<div class="col-md-2 col-sm-4">{pagesize}</div>'
+                        . '<div class="col-md-2">{exporttable}</div>'
+                        . '</div>'
+                ]
             ]
         ]
         ],[
