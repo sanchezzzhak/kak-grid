@@ -3,7 +3,6 @@ namespace kak\widgets\grid\behaviors;
 use kak\widgets\grid\interfaces\ExportType;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
-use yii\helpers\Url;
 use Yii;
 
 /**
@@ -33,6 +32,7 @@ class ExportTableBehavior extends Behavior
      */
     public $exportColumns = [];
 
+    public $label = '<i class="glyphicon glyphicon-export"></i> Export';
     /**
      * render the output
      */
@@ -90,7 +90,7 @@ class ExportTableBehavior extends Behavior
         foreach ($this->types as $type => $label) {
             $dropdown['items'][] = [
                 'label' => $label,
-                'url' => Url::to($this->url) . '?' . \Yii::$app->request->getQueryString(),
+                'url' => '?' . \Yii::$app->request->getQueryString(),
                 'options' => [
                     'data-role' => 'grid-export',
                     'data-hash' => $hash,
@@ -104,7 +104,7 @@ class ExportTableBehavior extends Behavior
 
         $html = ButtonDropdown::widget([
             'encodeLabel' => false,
-            'label' => '<i class="glyphicon glyphicon-export"></i> Export',
+            'label' => $this->label,
             'dropdown' => $dropdown,
             'options' => $this->dropDownOptions
         ]);

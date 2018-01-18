@@ -1,12 +1,15 @@
 <?php
 namespace kak\widgets\grid\mappers;
 
-
 use kak\widgets\grid\columns\CheckboxColumn;
 use kak\widgets\grid\columns\DataColumn;
 use yii\db\ActiveRecordInterface;
 use yii\grid\ActionColumn;
 
+/**
+ * Class ColumnMapper
+ * @package kak\widgets\grid\mappers
+ */
 class ColumnMapper
 {
 
