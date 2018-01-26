@@ -28,12 +28,13 @@ class DataProviderBatchIterator implements Iterator , Countable
      * @param BaseDataProvider $dataProvider
      * @param ColumnMapper $mapper
      */
-    public function __construct(BaseDataProvider $dataProvider, ColumnMapper $mapper)
+    public function __construct($dataProvider, ColumnMapper $mapper)
     {
         $this->dataProvider = $dataProvider;
-        $this->mapper = $mapper;
-        $this->totalItemCount = $dataProvider->getTotalCount();
+        $this->dataProvider->prepare();
+        $this->totalItemCount = $this->dataProvider->getTotalCount();
 
+        $this->mapper = $mapper;
         if (($pagination = $this->dataProvider->getPagination()) === false) {
             $this->dataProvider->setPagination($pagination = new Pagination());
         }
