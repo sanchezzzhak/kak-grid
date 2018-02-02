@@ -19,10 +19,26 @@ class ExportService
      * @var \kak\widgets\grid\GridView;
      */
     public $grid;
+    /**
+     * @var string export type
+     */
     public $type;
+    /**
+     * @var array set columns export default export all
+     */
     public $exportColumns;
+    /**
+     * @var bool remove cell html
+     */
     public $columnRemoveHtml = true;
+    /**
+     * @var null|boolean export columns named ?
+     */
     public $columnHeader = null;
+    /**
+     * @var null|integer max page export default all
+     */
+    public $limit = null;
 
     public function run()
     {
@@ -38,7 +54,7 @@ class ExportService
         $dataProvider = $this->grid->dataProvider;
 
         $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader);
-        $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper));
+        $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper, $this->limit));
 
         $writer->openToBrowser($this->getFileName());
 

@@ -22,17 +22,35 @@ class DataProviderBatchIterator implements Iterator , Countable
     private $items;
     /** @var ColumnMapper */
     private $mapper;
+    /** @var integer */
+    private $limit;
 
     /**
      * DataProviderBatchIterator constructor.
      * @param BaseDataProvider $dataProvider
      * @param ColumnMapper $mapper
+     * @param integer $limit
      */
-    public function __construct($dataProvider, ColumnMapper $mapper)
+    public function __construct($dataProvider, ColumnMapper $mapper, $limit = null)
     {
         $this->dataProvider = $dataProvider;
+        $this->limit = $limit;
         $this->dataProvider->prepare();
         $this->totalItemCount = $this->dataProvider->getTotalCount();
+
+        if($this->limit!==null){
+            $pageSize = $this->getDataProvider()->getPagination()->pageSize;
+            $totalItemsCount = $pageSize * $limit;
+            if($totalItemsCount <=  $this->totalItemCount){
+                $this->totalItemCount = $totalItemsCount;
+            }
+        }
+
+
+
+        /*
+         *
+         * */
 
         $this->mapper = $mapper;
         if (($pagination = $this->dataProvider->getPagination()) === false) {

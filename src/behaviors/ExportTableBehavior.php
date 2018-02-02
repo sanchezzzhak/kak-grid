@@ -25,6 +25,7 @@ use Yii;
         ]
         ],[
             'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
+
         ]
     ],
  * ```
@@ -34,10 +35,17 @@ class ExportTableBehavior extends Behavior
      public $dropDownOptions = [];
 
     /**
-     * @var array is empty lisr then export all columns
+     * @var array is empty list then export all columns
      */
     public $exportColumns = [];
 
+    /**
+     * @var null|integer max page export default all pages
+     */
+    public $limit = null;
+    /**
+     * @var string dropdown menu label
+     */
     public $label = '<i class="glyphicon glyphicon-export"></i> Export';
     /**
      * render the output
@@ -54,7 +62,7 @@ class ExportTableBehavior extends Behavior
     public $types = [
         ExportType::CSV => 'CSV',
         ExportType::XLSX => 'Excel 2007+',
-        ExportType::GOOGLE => 'Google Spreadsheet',
+        //ExportType::GOOGLE => 'Google Spreadsheet',
         ExportType::ODS => 'Open Document Spreadsheet',
         ExportType::JSON => 'JSON',
         ExportType::XML => 'XML',
@@ -76,6 +84,7 @@ class ExportTableBehavior extends Behavior
             $service = new \kak\widgets\grid\services\ExportService;
             $service->grid = $this->owner;
             $service->type = $type;
+            $service->limit = $this->limit;
             $service->exportColumns = $this->exportColumns;
             $service->run();
         }
@@ -107,7 +116,6 @@ class ExportTableBehavior extends Behavior
                 ]
             ];
         }
-
         $html = ButtonDropdown::widget([
             'encodeLabel' => false,
             'label' => $this->label,
