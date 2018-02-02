@@ -71,7 +71,6 @@ Column types
 * [DataColumn](docs/columns/data-column.md) ( support editable in processing)
 * [LabelColumn](docs/columns/label-column.md)
 * [SwapColumn](docs/columns/swap-column.md)  ( in processing )
-* [CheckboxColumn](docs/columns/checkbox-column.md) ( in processing )
 
 Behaviors
 -

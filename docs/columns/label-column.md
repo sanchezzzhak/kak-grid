@@ -1,36 +1,28 @@
 
 
 
-Class DataColumn
+Class LabelColumn
 @package kak\widgets\grid\columns
 
-@see \kak\widgets\grid\helpers\GridHelper::SUMMARY_SUM
-@see \kak\widgets\grid\helpers\GridHelper::SUMMARY_COUNT
-@see \kak\widgets\grid\helpers\GridHelper::SUMMARY_AVG
-@see \kak\widgets\grid\helpers\GridHelper::SUMMARY_MAX
-@see \kak\widgets\grid\helpers\GridHelper::SUMMARY_MIN
+#### *public* labels 
+ @var array $labels the configuration on how to display the different label values.
 
-```php
- // base
- echo \kak\widgets\grid\GridView::widget([
-     'columns' => [
-         'hits_sum' => [
-             'format' => ['decimal', 2]
-             'attribute' => 'hits_sum',
-             'summary' => 'sum'
-         ]
- ]
- ])
- // set custom summary function
- echo \kak\widgets\grid\GridView::widget([
-     'columns' => [
-         'hits_sum' => [
-             'attribute' => 'hits_sum',
-             'summary' => function($models, $column){}
-         ]
-     ]
- ])
 ```
+active' => [                       // value cell
+    'label' => 'subscribed',       // class label
+    'options' => [
+        'style' => 'padding: 2px'  // style label tag
+    ]
+,
+```
+
+The key names of the array will be used to match against the value. If a match is found, will render a bootstrap
+label with the options provided.
+
+@see http://getbootstrap.com/components/#labels
+
+#### *public* format 
+ @var string forcely set the format to HTML.
 
 #### *public* summary 
  @var string|\Closure
@@ -68,13 +60,6 @@ This can be used when the attribute to be displayed is different from the [[attr
 sorting and filtering.
 
 If this is not set, `$model[$attribute]` will be used to obtain the value, where `$attribute` is the value of [[attribute]].
-
-#### *public* format 
- @var string|array|Closure in which format should the value of each data model be displayed as (e.g. `"raw"`, `"text"`, `"html"`,
-`['date', 'php:Y-m-d']`). Supported formats are determined by the [[GridView::formatter|formatter]] used by
-the [[GridView]]. Default format is "text" which will format the value as an HTML-encoded plain text when
-[[\yii\i18n\Formatter]] is used as the [[GridView::$formatter|formatter]] of the GridView.
-@see \yii\i18n\Formatter::format()
 
 #### *public* enableSorting 
  @var bool whether to allow sorting by this column. If true and [[attribute]] is found in
@@ -141,6 +126,9 @@ A function may be used to assign different attributes to different rows based on
 #### *public* filterOptions 
  @var array the HTML attributes for the filter cell tag.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
+#### getDataCellValue() 
+@inheritdoc
+
 #### renderHeaderCell() 
 Renders the header cell.
 
@@ -160,13 +148,6 @@ This method may be overridden to customize the rendering of the footer cell.
 #### getFooterCellSummary() 
 get cell summary column values
 @return null|number
-
-#### getDataCellValue() 
-Returns the data cell value.
- * `param mixed` $model the data model
- * `param mixed` $key the key associated with the data model
- * `param int` $index the zero-based index of the data model among the models array returned by [[GridView::dataProvider]].
-@return string the data cell value
 
 #### renderFooterCell() 
 Renders the footer cell.

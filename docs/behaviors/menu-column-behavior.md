@@ -1,6 +1,5 @@
 
 
-[MenuColumnsBehavior]
 
 Class MenuColumnsBehavior
 @package kak\widgets\grid\behaviors
@@ -21,8 +20,10 @@ Class MenuColumnsBehavior
  ],
 ```
 
-#### *public* label
-#### *public* owner@var Component|null the owner of this behavior
+#### *public* label 
+ 
+#### *public* owner 
+ @var Component|null the owner of this behavior
 #### renderMenuColumns() 
 render the output
 

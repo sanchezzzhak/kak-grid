@@ -1,6 +1,5 @@
 
 
-[ToolBarBehavior]
 
 Class ToolBarBehavior
 @package kak\widgets\grid\behaviors
@@ -19,8 +18,10 @@ Class ToolBarBehavior
  ],
 ```
 
-#### *public* toolbarr $owner \kak\widgets\grid\GridView  */
-#### *public* owner@var Component|null the owner of this behavior
+#### *public* toolbar 
+ r $owner \kak\widgets\grid\GridView  */
+#### *public* owner 
+ @var Component|null the owner of this behavior
 #### renderToolBar() 
 Renders the toolbar.
 @return string

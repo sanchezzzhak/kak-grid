@@ -1,40 +1,50 @@
 
 
-[GridView]
 
 Class GridView
 @package kak\widgets\grid
 @property $behaviors;
 
-#### *public* sortArrow@var bool show direct sorted column up/down
+#### *public* sortArrow 
+ @var bool show direct sorted column up/down
 
-#### *public* contentOptions@var array
+#### *public* contentOptions 
+ @var array
 
-#### *public* dataColumnClass@var string
+#### *public* dataColumnClass 
+ @var string
 
-#### *public* layout@var string
+#### *public* layout 
+ @var string
 
-#### *public* caption@var string the caption of the grid table
+#### *public* caption 
+ @var string the caption of the grid table
 @see captionOptions
 
-#### *public* captionOptions@var array the HTML attributes for the caption element.
+#### *public* captionOptions 
+ @var array the HTML attributes for the caption element.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 @see caption
 
-#### *public* tableOptions@var array the HTML attributes for the grid table element.
+#### *public* tableOptions 
+ @var array the HTML attributes for the grid table element.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* options@var array the HTML attributes for the container tag of the grid view.
+#### *public* options 
+ @var array the HTML attributes for the container tag of the grid view.
 The "tag" element specifies the tag name of the container element and defaults to "div".
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* headerRowOptions@var array the HTML attributes for the table header row.
+#### *public* headerRowOptions 
+ @var array the HTML attributes for the table header row.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* footerRowOptions@var array the HTML attributes for the table footer row.
+#### *public* footerRowOptions 
+ @var array the HTML attributes for the table footer row.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* rowOptions@var array|Closure the HTML attributes for the table body rows. This can be either an array
+#### *public* rowOptions 
+ @var array|Closure the HTML attributes for the table body rows. This can be either an array
 specifying the common HTML attributes for all body rows, or an anonymous function that
 returns an array of the HTML attributes. The anonymous function will be called once for every
 data model returned by [[dataProvider]]. It should have the following signature:
@@ -50,25 +60,32 @@ function ($model, $key, $index, $grid)
 
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* beforeRow@var Closure an anonymous function that is called once BEFORE rendering each data model.
+#### *public* beforeRow 
+ @var Closure an anonymous function that is called once BEFORE rendering each data model.
 It should have the similar signature as [[rowOptions]]. The return result of the function
 will be rendered directly.
 
-#### *public* afterRow@var Closure an anonymous function that is called once AFTER rendering each data model.
+#### *public* afterRow 
+ @var Closure an anonymous function that is called once AFTER rendering each data model.
 It should have the similar signature as [[rowOptions]]. The return result of the function
 will be rendered directly.
 
-#### *public* showHeader@var bool whether to show the header section of the grid table.
+#### *public* showHeader 
+ @var bool whether to show the header section of the grid table.
 
-#### *public* showFooter@var bool whether to show the footer section of the grid table.
+#### *public* showFooter 
+ @var bool whether to show the footer section of the grid table.
 
-#### *public* showOnEmpty@var bool whether to show the grid view if [[dataProvider]] returns no data.
+#### *public* showOnEmpty 
+ @var bool whether to show the grid view if [[dataProvider]] returns no data.
 
-#### *public* formatter@var array|Formatter the formatter used to format model attribute values into displayable texts.
+#### *public* formatter 
+ @var array|Formatter the formatter used to format model attribute values into displayable texts.
 This can be either an instance of [[Formatter]] or an configuration array for creating the [[Formatter]]
 instance. If this property is not set, the "formatter" application component will be used.
 
-#### *public* columns@var array grid column configuration. Each array element represents the configuration
+#### *public* columns 
+ @var array grid column configuration. Each array element represents the configuration
 for one particular grid column. For example,
 
 ```php
@@ -115,7 +132,8 @@ e.g. the `name` attribute of the `author` relation:
 ]
 ```
 
-#### *public* emptyCell@var string the HTML display when the content of a cell is empty.
+#### *public* emptyCell 
+ @var string the HTML display when the content of a cell is empty.
 This property is used to render cells that have no defined content,
 e.g. empty footer or filter cells.
 
@@ -123,7 +141,8 @@ Note that this is not used by the [[DataColumn]] if a data item is `null`. In th
 the [[\yii\i18n\Formatter::nullDisplay|nullDisplay]] property of the [[formatter]] will
 be used to indicate an empty data value.
 
-#### *public* filterModel@var \yii\base\Model the model that keeps the user-entered filter data. When this property is set,
+#### *public* filterModel 
+ @var \yii\base\Model the model that keeps the user-entered filter data. When this property is set,
 the grid view will enable column-based filtering. Each data column by default will display a text field
 at the top that users can fill in to filter the data.
 
@@ -133,42 +152,52 @@ property set and the attribute should be active in the current scenario of $filt
 
 When this property is not set (null) the filtering feature is disabled.
 
-#### *public* filterUrl@var string|array the URL for returning the filtering result. [[Url::to()]] will be called to
+#### *public* filterUrl 
+ @var string|array the URL for returning the filtering result. [[Url::to()]] will be called to
 normalize the URL. If not set, the current controller action will be used.
 When the user makes change to any filter input, the current filtering inputs will be appended
 as GET parameters to this URL.
 
-#### *public* filterSelector@var string additional jQuery selector for selecting filter input fields
+#### *public* filterSelector 
+ @var string additional jQuery selector for selecting filter input fields
 
-#### *public* filterPosition@var string whether the filters should be displayed in the grid view. Valid values include:
+#### *public* filterPosition 
+ @var string whether the filters should be displayed in the grid view. Valid values include:
 
 - [[FILTER_POS_HEADER]]: the filters will be displayed on top of each column's header cell.
 - [[FILTER_POS_BODY]]: the filters will be displayed right below each column's header cell.
 - [[FILTER_POS_FOOTER]]: the filters will be displayed below each column's footer cell.
 
-#### *public* filterRowOptions@var array the HTML attributes for the filter row element.
+#### *public* filterRowOptions 
+ @var array the HTML attributes for the filter row element.
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* filterErrorSummaryOptions@var array the options for rendering the filter error summary.
+#### *public* filterErrorSummaryOptions 
+ @var array the options for rendering the filter error summary.
 Please refer to [[Html::errorSummary()]] for more details about how to specify the options.
 @see renderErrors()
 
-#### *public* filterErrorOptions@var array the options for rendering every filter error message.
+#### *public* filterErrorOptions 
+ @var array the options for rendering every filter error message.
 This is mainly used by [[Html::error()]] when rendering an error message next to every filter input field.
 
-#### *public* dataProvider@var \yii\data\DataProviderInterface the data provider for the view. This property is required.
+#### *public* dataProvider 
+ @var \yii\data\DataProviderInterface the data provider for the view. This property is required.
 
-#### *public* pager@var array the configuration for the pager widget. By default, [[LinkPager]] will be
+#### *public* pager 
+ @var array the configuration for the pager widget. By default, [[LinkPager]] will be
 used to render the pager. You can use a different widget class by configuring the "class" element.
 Note that the widget must support the `pagination` property which will be populated with the
 [[\yii\data\BaseDataProvider::pagination|pagination]] value of the [[dataProvider]].
 
-#### *public* sorter@var array the configuration for the sorter widget. By default, [[LinkSorter]] will be
+#### *public* sorter 
+ @var array the configuration for the sorter widget. By default, [[LinkSorter]] will be
 used to render the sorter. You can use a different widget class by configuring the "class" element.
 Note that the widget must support the `sort` property which will be populated with the
 [[\yii\data\BaseDataProvider::sort|sort]] value of the [[dataProvider]].
 
-#### *public* summary@var string the HTML content to be displayed as the summary of the list view.
+#### *public* summary 
+ @var string the HTML content to be displayed as the summary of the list view.
 If you do not want to show the summary, you may set it with an empty string.
 
 The following tokens will be replaced with the corresponding values:
@@ -180,27 +209,33 @@ The following tokens will be replaced with the corresponding values:
 - `{page}`: the page number (1-based) current being displayed
 - `{pageCount}`: the number of pages available
 
-#### *public* summaryOptions@var array the HTML attributes for the summary of the list view.
+#### *public* summaryOptions 
+ @var array the HTML attributes for the summary of the list view.
 The "tag" element specifies the tag name of the summary element and defaults to "div".
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public* emptyText@var string|false the HTML content to be displayed when [[dataProvider]] does not have any data.
+#### *public* emptyText 
+ @var string|false the HTML content to be displayed when [[dataProvider]] does not have any data.
 When this is set to `false` no extra HTML content will be generated.
 The default value is the text "No results found." which will be translated to the current application language.
 @see showOnEmpty
 @see emptyTextOptions
 
-#### *public* emptyTextOptions@var array the HTML attributes for the emptyText of the list view.
+#### *public* emptyTextOptions 
+ @var array the HTML attributes for the emptyText of the list view.
 The "tag" element specifies the tag name of the emptyText element and defaults to "div".
 @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
 
-#### *public static* counter@var int a counter used to generate [[id]] for widgets.
+#### *public* counter 
+ @var int a counter used to generate [[id]] for widgets.
 @internal
 
-#### *public static* autoIdPrefix@var string the prefix to the automatically generated widget IDs.
+#### *public* autoIdPrefix 
+ @var string the prefix to the automatically generated widget IDs.
 @see getId()
 
-#### *public static* stack@var Widget[] the widgets that are currently being rendered (not ended). This property
+#### *public* stack 
+ @var Widget[] the widgets that are currently being rendered (not ended). This property
 is maintained by [[begin()]] and [[end()]] methods.
 @internal
 #### setBehaviors() 

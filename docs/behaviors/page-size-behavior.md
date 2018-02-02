@@ -1,6 +1,5 @@
 
 
-[PageSizeBehavior]
 
 Class PageSizeBehavior
 @package kak\widgets\grid\behaviors
@@ -20,18 +19,25 @@ Class PageSizeBehavior
  ],
 ```
 
-#### *public* defaultPageSize@var integer the default page size. This page size will be used when the $_GET['per-page'] is empty.
+#### *public* defaultPageSize 
+ @var integer the default page size. This page size will be used when the $_GET['per-page'] is empty.
 
-#### *public* pageSizeParam@var string the name of the GET request parameter used to specify the size of the page.
+#### *public* pageSizeParam 
+ @var string the name of the GET request parameter used to specify the size of the page.
 This will be used as the input name of the dropdown list with page size options.
 
-#### *public* sizes@var array the list of page sizes
+#### *public* sizes 
+ @var array the list of page sizes
 
-#### *public* template@var string the template to be used for rendering the output.
+#### *public* template 
+ @var string the template to be used for rendering the output.
 
-#### *public* options@var array the list of options for the drop down list.
+#### *public* options 
+ @var array the list of options for the drop down list.
 
-#### *public* owner@var Component|null the owner of this behavior
+#### *public* owner 
+ @var Component|null the owner of this behavior
+#### run() 
 #### renderPageSize() 
 render the output
 

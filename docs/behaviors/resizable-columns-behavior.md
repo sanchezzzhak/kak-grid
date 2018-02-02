@@ -1,13 +1,13 @@
 
 
-[ResizableColumnsBehavior]
 
 Class ResizableColumnsBehavior
 @package kak\widgets\grid\behaviors
 
 
 
-#### *public* clientOptions@var array
+#### *public* clientOptions 
+ @var array
 ```php
 [
  'selector' => new JsExpression('function selector($table) {... see js code ...}'),
@@ -19,7 +19,8 @@ Class ResizableColumnsBehavior
 ]
 ```
 
-#### *public* owner@var Component|null the owner of this behavior
+#### *public* owner 
+ @var Component|null the owner of this behavior
 #### run() 
 #### events() 
 Declares event handlers for the [[owner]]'s events.

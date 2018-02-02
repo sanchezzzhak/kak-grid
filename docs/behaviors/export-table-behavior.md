@@ -1,6 +1,5 @@
 
 
-[ExportTableBehavior]
 
 Class ExportTableBehavior
 @package kak\widgets\grid\behaviors
@@ -10,21 +9,38 @@ Class ExportTableBehavior
      [
          'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
          'toolbar' => [
-             [ 'content' => '{exporttable}'  ] // attach ExportTableBehavior
+             [
+                 // attach ExportTableBehavior placeholder
+                 'content' => '<div class="form-group">'
+                     . '<div class="col-md-2 col-sm-4">{pagesize}</div>'
+                     . '<div class="col-md-2">{exporttable}</div>'
+                     . '</div>'
+             ]
          ]
      ]
      ],[
          'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
+
      ]
  ],
 ```
 
-#### *public* dropDownOptions
-#### *public* exportColumns@var array is empty lisr then export all columns
+#### *public* dropDownOptions 
+ 
+#### *public* exportColumns 
+ @var array is empty list then export all columns
 
-#### *public* types@var array format support export
+#### *public* limit 
+ @var null|integer max page export default all pages
 
-#### *public* owner@var Component|null the owner of this behavior
+#### *public* label 
+ @var string dropdown menu label
+
+#### *public* types 
+ @var array format support export
+
+#### *public* owner 
+ @var Component|null the owner of this behavior
 #### renderExportTable() 
 render the output
 

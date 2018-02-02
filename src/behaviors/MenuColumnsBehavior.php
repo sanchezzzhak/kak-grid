@@ -69,7 +69,7 @@ class MenuColumnsBehavior extends Behavior
     }
 
     /*
-    // refactory methods stash
+    // refectory methods stash
     protected function prepareVisibilityColumns()
     {
         $key = 'kak-grid_'.$this->id;
