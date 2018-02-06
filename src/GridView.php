@@ -60,7 +60,6 @@ class GridView extends \yii\grid\GridView
      * @var string
      */
     public $layout = "
-        {toolbar}
         {summary}
         {items}
         {pager}
