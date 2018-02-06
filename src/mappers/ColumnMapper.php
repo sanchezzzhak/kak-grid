@@ -53,7 +53,7 @@ class ColumnMapper
                 /** @var DataColumn $column */
                 $key = $model instanceof ActiveRecordInterface
                     ? $model->getPrimaryKey()
-                    : $model[$column->attribute];
+                    : isset($model[$column->attribute]) ? $model[$column->attribute]: null;
 
                 $value = $this->getColumnValue($column, $model, $key, $index);
                 $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
@@ -93,7 +93,7 @@ class ColumnMapper
      */
     protected function isColumnExportable($column)
     {
-        if ($column instanceof ActionColumn || $column instanceof CheckboxColumn) {
+        if ($column instanceof ActionColumn || $column instanceof CheckboxColumn || ($column instanceof DataColumn && $column->export === false)) {
             return false;
         }
         if (!empty($this->exportColumns)) {

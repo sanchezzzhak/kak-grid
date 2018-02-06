@@ -47,6 +47,11 @@ class DataColumn extends \yii\grid\DataColumn
      */
     public $summary;
 
+    /**
+     * @var bool
+     */
+    public $export = true;
+
     /** @var \kak\widgets\grid\GridView */
     public $grid;
 
