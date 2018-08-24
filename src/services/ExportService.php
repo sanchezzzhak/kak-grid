@@ -1,6 +1,7 @@
 <?php
 namespace  kak\widgets\grid\services;
 
+use Box\Spout\Writer\CSV\Writer as CsvWriter;
 use kak\widgets\grid\interfaces\ExportType;
 use kak\widgets\grid\iterators\DataProviderBatchIterator;
 use kak\widgets\grid\iterators\SourceIterator;
@@ -40,6 +41,9 @@ class ExportService
      */
     public $limit = null;
 
+    /** @var string */
+    public $csvFieldDelimiter = ';';
+
     public function run()
     {
         try {
@@ -65,7 +69,7 @@ class ExportService
             $writer->addRow($data);
         }
         $writer->close();
-        \Yii::$app->end();
+        exit;
     }
 
     /**
@@ -79,11 +83,14 @@ class ExportService
         $type = isset($types[$this->type]) ? $types[$this->type] : $this->type;
         return Yii::$app->controller->id . '-' . Yii::$app->controller->action->id  . '-' . date('Y-m-d-Hi') . '.' . $type;
     }
-
-
+    
     protected function getWriter()
     {
-        return writer\WriterFactory::create($this->type);
+        $result = writer\WriterFactory::create($this->type);
+        if ($result instanceof CsvWriter) {
+            $result->setFieldDelimiter($this->csvFieldDelimiter);
+        }
+        return $result;
     }
 
 
