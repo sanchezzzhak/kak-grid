@@ -8,7 +8,7 @@ use yii\web\AssetBundle;
  */
 class ResizableColumnsAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/bower/jquery-resizable-columns/dist';
+    public $sourcePath = '@bower/jquery-resizable-columns/dist';
     public $depends = [
         'yii\web\JqueryAsset'
     ];
