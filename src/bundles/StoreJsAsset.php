@@ -4,7 +4,7 @@ use yii\web\AssetBundle;
 
 class StoreJsAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/bower/store.js/dist';
+    public $sourcePath = '@bower/store.js/dist';
     public $depends = [
         'yii\web\JqueryAsset'
     ];
