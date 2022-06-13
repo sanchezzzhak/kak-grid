@@ -36,6 +36,9 @@ jobs:
       - name: "Composer install"
         run: |
           composer install --ignore-platform-reqs
+      - name: "Codeception build"
+        run: |
+          php ./vendor/bin/codecept build
       - name: PHPCodecept / PHP ${{ matrix.php-version }}
         run: |
           php -v
