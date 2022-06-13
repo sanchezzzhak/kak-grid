@@ -35,7 +35,7 @@ jobs:
           extensions: memcached
       - name: "Composer install"
         run: |
-          composer install --ignore-platform-reqs
+          composer install
       - name: "Codeception build"
         run: |
           php ./vendor/bin/codecept build
