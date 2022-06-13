@@ -26,7 +26,7 @@
     "bower-asset/store.js": "~2.0"
   },
   "require-dev": {
-    "codeception/codeception": "4.*",
+    "codeception/codeception": "4.1.13",
     "codeception/module-asserts": "1.3",
     "codeception/module-yii2": "1.1"
   },
