@@ -17,12 +17,9 @@ function s(?string $string = '')
     return preg_match('//u', $string) ? new UnicodeString($string) : new ByteString($string);
 }
 
-$autoloadGitHub = dirname(__DIR__, 1) . '/vendor/autoload.php';
-$yiiGitHub = dirname(__DIR__, 1) . '/vendor/yiisoft/yii2/Yii.php';
-
-
-require_once $yiiGitHub;
-require_once $autoloadGitHub;
+require_once dirname(__DIR__, 1) . '/vendor/autoload.php';
+require_once dirname(__DIR__, 1) . '/vendor/yiisoft/yii2/Yii.php';
+require_once __DIR__ . '/hack_symphony.php';
 
 Yii::setAlias('@tests', __DIR__);
 Yii::setAlias('@data', __DIR__ . DIRECTORY_SEPARATOR . '_data');
