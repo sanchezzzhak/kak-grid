@@ -1,7 +1,9 @@
 <?php
-namespace  kak\widgets\grid\services;
+
+namespace kak\widgets\grid\services;
 
 use Box\Spout\Writer\CSV\Writer as CsvWriter;
+use kak\widgets\grid\GridView;
 use kak\widgets\grid\interfaces\ExportType;
 use kak\widgets\grid\iterators\DataProviderBatchIterator;
 use kak\widgets\grid\iterators\SourceIterator;
@@ -16,30 +18,20 @@ use yii\web\HttpException;
  */
 class ExportService
 {
-    /***
-     * @var \kak\widgets\grid\GridView;
-     */
+    /**** @var GridView; */
     public $grid;
     /**
      * @var string export type
      */
     public $type;
-    /**
-     * @var array set columns export default export all
-     */
+    /*** @var array set columns export default export all */
     public $exportColumns;
-    /**
-     * @var bool remove cell html
-     */
+    /*** @var bool remove cell html */
     public $columnRemoveHtml = true;
-    /**
-     * @var null|boolean export columns named ?
-     */
-    public $columnHeader = null;
-    /**
-     * @var null|integer max page export default all
-     */
-    public $limit = null;
+    /*** @var null|boolean export columns named ? */
+    public $columnHeader;
+    /*** @var null|integer max page export default all */
+    public $limit;
 
     /** @var string */
     public $csvFieldDelimiter = ';';
@@ -48,7 +40,7 @@ class ExportService
     {
         try {
             $writer = $this->getWriter();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             throw new HttpException(403, $e->getMessage());
         }
 
@@ -62,12 +54,14 @@ class ExportService
 
         $writer->openToBrowser($this->getFileName());
 
-        if (!in_array($this->type, [ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])) {
+        if (!$this->hasColumnHeaders()) {
             $writer->addRow($mapper->getHeaders());
         }
-        foreach ($source as $data){
+
+        foreach ($source as $data) {
             $writer->addRow($data);
         }
+
         $writer->close();
         exit;
     }
@@ -80,26 +74,39 @@ class ExportService
         $types = [
             ExportType::JSON_ROW => 'json',
         ];
-        $type = isset($types[$this->type]) ? $types[$this->type] : $this->type;
-        return Yii::$app->controller->id . '-' . Yii::$app->controller->action->id  . '-' . date('Y-m-d-Hi') . '.' . $type;
+
+        return sprintf('%s-%s-%s.%s',
+            Yii::$app->controller->id,
+            Yii::$app->controller->action->id,
+            date('Y-m-d-Hi'),
+            $types[$this->type] ?? $this->type
+        );
     }
-    
+
     protected function getWriter()
     {
         $result = writer\WriterFactory::create($this->type);
+
         if ($result instanceof CsvWriter) {
             $result->setFieldDelimiter($this->csvFieldDelimiter);
         }
+
         return $result;
     }
 
+    protected function hasColumnHeaders()
+    {
+        return in_array($this->type, [ExportType::JSON_ROW, ExportType::JSON, ExportType::XML], false);
+    }
 
     protected function initColumnHeaderNamed()
     {
-        if(in_array($this->type,[ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])){
-            $this->columnHeader = false;
-        }else if($this->columnHeader === null){
+        if ($this->columnHeader === null) {
             $this->columnHeader = true;
+        }
+
+        if ($this->hasColumnHeaders()) {
+            $this->columnHeader = false;
         }
     }
 

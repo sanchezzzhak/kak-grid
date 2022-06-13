@@ -1,10 +1,11 @@
 <?php
+
 namespace kak\widgets\grid\mappers;
 
-use kak\widgets\grid\columns\CheckboxColumn;
 use kak\widgets\grid\columns\DataColumn;
 use yii\db\ActiveRecordInterface;
 use yii\grid\ActionColumn;
+use yii\grid\CheckboxColumn;
 
 /**
  * Class ColumnMapper
@@ -12,11 +13,12 @@ use yii\grid\ActionColumn;
  */
 class ColumnMapper
 {
+    /** @var DataColumn[] */
+    private $columns;
 
-    private $columns = [];
-    private $exportColumns = [];
-    private $removeHtml = true;
-    private $columnHeader = true;
+    private $exportColumns;
+    private $removeHtml;
+    private $columnHeader;
 
     public function __construct($columns, $exportColumns, $removeHtml, $columnHeader)
     {
@@ -26,14 +28,12 @@ class ColumnMapper
         $this->columnHeader = $columnHeader;
     }
 
-
     public function getHeaders()
     {
         $headers = [];
-        /** @var DataColumn $column */
         foreach ($this->columns as $column) {
             if ($this->isColumnExportable($column)) {
-                $headers[] = $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
+                $headers[] = $this->columnHeader ? $this->getColumnHeader($column) : $column->attribute;
             }
         }
         return $headers;
@@ -49,16 +49,19 @@ class ColumnMapper
     {
         $row = [];
         foreach ($this->columns as $column) {
-            if ($this->isColumnExportable($column)) {
-                /** @var DataColumn $column */
-                $key = $model instanceof ActiveRecordInterface
-                    ? $model->getPrimaryKey()
-                    : isset($model[$column->attribute]) ? $model[$column->attribute]: null;
 
-                $value = $this->getColumnValue($column, $model, $key, $index);
-                $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
-                $row[$header] = $value;
+            if (!$this->isColumnExportable($column)) {
+                continue;
             }
+
+            $key = $model instanceof ActiveRecordInterface
+                ? $model->getPrimaryKey()
+                : $model[$column->attribute] ?? null;
+
+            $value = $this->getColumnValue($column, $model, $key, $index);
+            $header = $this->columnHeader ? $this->getColumnHeader($column) : $column->attribute;
+            $row[$header] = $value;
+
         }
 
         return $row;
@@ -93,12 +96,18 @@ class ColumnMapper
      */
     protected function isColumnExportable($column)
     {
-        if ($column instanceof ActionColumn || $column instanceof CheckboxColumn || ($column instanceof DataColumn && $column->export === false)) {
+        $hasExport = $column instanceof ActionColumn
+            || $column instanceof CheckboxColumn
+            || ($column instanceof DataColumn && $column->export === false);
+
+        if ($hasExport) {
             return false;
         }
+
         if (!empty($this->exportColumns)) {
-            return in_array($column->attribute, $this->exportColumns);
+            return in_array($column->attribute, $this->exportColumns, false);
         }
+
         return true;
     }
 

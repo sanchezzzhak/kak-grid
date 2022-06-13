@@ -3,9 +3,9 @@
 namespace kak\widgets\grid\behaviors;
 
 use kak\widgets\grid\columns\DataColumn;
-use kak\widgets\grid\interfaces\ExportType;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
+use yii\bootstrap\Dropdown;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
@@ -53,7 +53,7 @@ class MenuColumnsBehavior extends Behavior
 
         $content = Html::beginTag('div', ['class' => 'dropdown-checkbox btn-group', 'data-role' => 'grid-menu-columns']);
         $content .= Html::tag('button', $this->label, ['class' => ' btn btn-default dropdown-toggle', 'data-toggle' => 'dropdown']);
-        $content .= \yii\bootstrap\Dropdown::widget([
+        $content .= Dropdown::widget([
             'items' => $items,
             'options' => ['class' => 'dropdown-checkbox-content']
         ]);

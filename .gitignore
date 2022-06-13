@@ -2,5 +2,5 @@
 composer.lock
 vendor/
 tests/_output/*
-tests/_support/*
-robo.phar
+tests/_config/config.php
+tests/_support/_generated/*

@@ -13,8 +13,9 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 ```php
 <?php
-  use kak\widgets\grid\GridView; 
-  use yii\helpers\Html;
+    use kak\widgets\grid\GridView; 
+    use yii\grid\ActionColumn;
+    use yii\helpers\Html;
   
 echo GridView::widget([
     'showFooter' => true,
@@ -23,9 +24,12 @@ echo GridView::widget([
       'user' => [
           'header' => 'user',
           'format' => 'html',
-          'value'  => function($data){
-              return '[' . $data->stream_id . '] '
-              .  Html::a($data->user->name,['user/update', 'id' => $data->user->id ]);
+          'value'  => function(User $data){
+              return sprintf(
+                  '[%s] %s',
+                  $data->user_id,
+                   Html::a($data->user->name,['user/update', 'id' => $data->user->id ])
+              );
           }
       ],
       'date_key',
@@ -38,8 +42,8 @@ echo GridView::widget([
       'country_id' => [
           'header' => 'Country',
           'format' => 'html',
-          'value'  => function($data){
-              return Html::img($data->country->flag_url,['title' => $data->country->name_ru]);
+          'value' => function($data){
+              return Html::img($data->country->flag_url, ['title' => $data->country->name_ru]);
           },
          'footer' =>  '<b>Total redirect</b>',
       ],
@@ -54,11 +58,11 @@ echo GridView::widget([
       'ratio (redirect/view)' => [
           'header' => 'Ratio',
           'value' =>  function($data){
-              return round( (int)$data->redirect_count/(int)$data->view_count ,2);
+              return round( (int)$data->redirect_count / (int)$data->view_count, 2);
           }
       ],
       'actions' => [
-          'class' => \yii\grid\ActionColumn::className(),
+          'class' => ActionColumn::class,
           'template' => '{view}',
       ],
     ]
@@ -71,6 +75,7 @@ Column types
 * [DataColumn](docs/columns/data-column.md) ( support editable in processing)
 * [LabelColumn](docs/columns/label-column.md)
 * [SwapColumn](docs/columns/swap-column.md)  ( in processing )
+* [MiniColumn](docs/columns/mini-column.md)
 
 Behaviors
 -
@@ -81,15 +86,9 @@ Behaviors
 * AutoFilterBehavior ( in processing )
 * [ResizableColumnsBehavior](docs/behaviors/resizable-columns-behavior.md)
     
-    
-<!--    
-## test configuration
+Best practice for create Grid (tutorial)
 ```
-cd project_dir 
-php composer.phar require kak/grid "dev-master"
-download codecept.phar & save to dir roor
-cd project_dir/vendor/kak/grid
-php -f ../../../codecept.phar bootstrap
-php -f ../../../codecept.phar build
+
+
+
 ```
--->

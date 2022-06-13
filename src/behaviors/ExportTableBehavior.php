@@ -1,6 +1,9 @@
 <?php
+
 namespace kak\widgets\grid\behaviors;
+
 use kak\widgets\grid\interfaces\ExportType;
+use kak\widgets\grid\services\ExportService;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
 use Yii;
@@ -10,29 +13,29 @@ use Yii;
  * @package kak\widgets\grid\behaviors
  *
  * ```php
-    'behaviors' => [
-        [
-            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-            'toolbar' => [
-                [
-                    // attach ExportTableBehavior placeholder
-                    'content' => '<div class="form-group">'
-                        . '<div class="col-md-2 col-sm-4">{pagesize}</div>'
-                        . '<div class="col-md-2">{exporttable}</div>'
-                        . '</div>'
-                ]
-            ]
-        ]
-        ],[
-            'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
-
-        ]
-    ],
+ * 'behaviors' => [
+ * [
+ * 'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+ * 'toolbar' => [
+ * [
+ * // attach ExportTableBehavior placeholder
+ * 'content' => '<div class="form-group">'
+ * . '<div class="col-md-2 col-sm-4">{pagesize}</div>'
+ * . '<div class="col-md-2">{exporttable}</div>'
+ * . '</div>'
+ * ]
+ * ]
+ * ]
+ * ],[
+ * 'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
+ *
+ * ]
+ * ],
  * ```
  */
 class ExportTableBehavior extends Behavior
 {
-     public $dropDownOptions = [];
+    public $dropDownOptions = [];
 
     /**
      * @var array is empty list then export all columns
@@ -47,13 +50,13 @@ class ExportTableBehavior extends Behavior
      * @var string dropdown menu label
      */
     public $label = '<i class="glyphicon glyphicon-export"></i> Export';
+
     /**
      * render the output
      */
     public function renderExportTable()
     {
-        $output = $this->initButtonDropdown();
-        return $output;
+        return $this->initButtonDropdown();
     }
 
     /**
@@ -77,11 +80,11 @@ class ExportTableBehavior extends Behavior
      */
     protected function process()
     {
-        if (Yii::$app->request->post('export') == 1){
+        if ((int)Yii::$app->request->post('export') === 1) {
             Yii::$app->response->clearOutputBuffers();
             $type = Yii::$app->request->post('type', null);
 
-            $service = new \kak\widgets\grid\services\ExportService;
+            $service = new ExportService;
             $service->grid = $this->owner;
             $service->type = $type;
             $service->limit = $this->limit;
@@ -123,10 +126,7 @@ class ExportTableBehavior extends Behavior
             'options' => $this->dropDownOptions
         ]);
 
-
         return $html;
     }
-
-
 
 }

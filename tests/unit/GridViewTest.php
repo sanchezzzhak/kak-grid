@@ -1,7 +1,11 @@
 <?php
 
 
-class GridViewTest extends \Codeception\Test\Unit
+use Codeception\Test\Unit;
+use kak\widgets\grid\GridView;
+use yii\web\View;
+
+class GridViewTest extends Unit
 {
 
     /**
@@ -26,10 +30,10 @@ class GridViewTest extends \Codeception\Test\Unit
             'reason' => 'test render closure options'
         ];
 
-        $grid = new  \kak\widgets\grid\GridView([
+        $grid = new  GridView([
             'id' => 'grid',
             'dataProvider' => new \yii\data\ArrayDataProvider(['allModels' => [ $model ]]),
-            'view' => new \yii\web\View(),
+            'view' => new View(),
         ]);
 
         echo $grid->run();

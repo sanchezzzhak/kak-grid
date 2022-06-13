@@ -1,4 +1,5 @@
 <?php
+
 namespace kak\widgets\grid\iterators;
 
 use Iterator;
@@ -8,7 +9,7 @@ use yii\data\BaseDataProvider;
 use yii\data\Pagination;
 use yii\db\ActiveRecordInterface;
 
-class DataProviderBatchIterator implements Iterator , Countable
+class DataProviderBatchIterator implements Iterator, Countable
 {
     /*** @var \yii\data\BaseDataProvider */
     private $dataProvider;
@@ -38,25 +39,18 @@ class DataProviderBatchIterator implements Iterator , Countable
         $this->dataProvider->prepare();
         $this->totalItemCount = $this->dataProvider->getTotalCount();
 
-        if($this->limit!==null){
+        if ($this->limit !== null) {
             $pageSize = $this->getDataProvider()->getPagination()->pageSize;
             $totalItemsCount = $pageSize * $limit;
-            if($totalItemsCount <=  $this->totalItemCount){
+            if ($totalItemsCount <= $this->totalItemCount) {
                 $this->totalItemCount = $totalItemsCount;
             }
         }
-
-
-
-        /*
-         *
-         * */
 
         $this->mapper = $mapper;
         if (($pagination = $this->dataProvider->getPagination()) === false) {
             $this->dataProvider->setPagination($pagination = new Pagination());
         }
-
     }
 
     /**
@@ -101,8 +95,6 @@ class DataProviderBatchIterator implements Iterator , Countable
 
         return $this->items = $this->getDataProvider()->getModels();
     }
-
-
 
 
     /**
@@ -157,9 +149,6 @@ class DataProviderBatchIterator implements Iterator , Countable
         return $this->key() < $this->getTotalItemCount();
     }
 
-
-
-
     /**
      * Rewind the Iterator to the first element
      * @link http://php.net/manual/en/iterator.rewind.php
@@ -201,8 +190,5 @@ class DataProviderBatchIterator implements Iterator , Countable
     {
         return $this->mapper->map($this->items[$index], $index);
     }
-
-
-
 
 }

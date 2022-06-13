@@ -1,5 +1,7 @@
 <?php
+
 namespace kak\widgets\grid\behaviors;
+
 use kak\widgets\grid\GridView;
 use yii\base\Behavior;
 use yii\data\Pagination;
@@ -10,24 +12,23 @@ use yii\helpers\Html;
  * @package kak\widgets\grid\behaviors
  *
  * ```php
-    'behaviors' => [
-        [
-            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-            'toolbar' => [
-             [
-                'content' => '{pagesize}' // attach behavior PageSizeBehavior
-             ]
-        ]
-        ],[
-            'class' => \kak\widgets\grid\behaviors\PageSizeBehavior::className(),
-        ]
-    ],
+ * 'behaviors' => [
+ * [
+ * 'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+ * 'toolbar' => [
+ * [
+ * 'content' => '{pagesize}' // attach behavior PageSizeBehavior
+ * ]
+ * ]
+ * ],[
+ * 'class' => \kak\widgets\grid\behaviors\PageSizeBehavior::className(),
+ * ]
+ * ],
  * ```
+ * @property \kak\widgets\grid\GridView $owner
  */
 class PageSizeBehavior extends Behavior
 {
-    /** @var $owner \kak\widgets\grid\GridView  */
-
     /**
      * @var integer the default page size. This page size will be used when the $_GET['per-page'] is empty.
      */
@@ -57,20 +58,20 @@ class PageSizeBehavior extends Behavior
     public $options;
 
 
-    public function run(){
-
-        /** @var GridView $owner */
+    public function run()
+    {
         $owner = $this->owner;
-
-        // set selector filters
-        $selector = ' #'.$owner->id . ' select[name="per-page"]';
+        $selector = sprintf( ' #%s select[name="per-page"], $owner->id');
         $filters = explode(',', $owner->filterSelector);
-        if (!in_array($selector, $filters)) {
-            $filters[] = $selector;
-            $owner->filterSelector = implode(',', array_filter($filters, function ($val) {
-                return !empty($val);
-            }));
+
+        if (!in_array($selector, $filters, false)) {
+            return;
         }
+
+        $filters[] = $selector;
+        $owner->filterSelector = implode(',', array_filter($filters, static function ($val) {
+            return !empty($val);
+        }));
     }
 
 
@@ -81,7 +82,7 @@ class PageSizeBehavior extends Behavior
     {
         $this->options['data-role'] = 'page-size';
         $perPage = !empty($_GET[$this->pageSizeParam]) ? $_GET[$this->pageSizeParam] : $this->defaultPageSize;
-        if(!isset($this->options['class'])){
+        if (!isset($this->options['class'])) {
             Html::addCssClass($this->options, 'form-control');
         }
         $listHtml = Html::dropDownList($this->pageSizeParam, $perPage, $this->sizes, $this->options);

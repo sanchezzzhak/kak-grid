@@ -1,17 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: PHPdev
- * Date: 16.11.2017
- * Time: 19:58
- */
+
+use yii\queue\JobInterface;
 
 /**
  * Class ExportQueue
  * background job export table
  * procession next version;
  */
-class ExportQueue extends \yii\base\Component implements \yii\queue\JobInterface
+class ExportQueue extends \yii\base\Component implements JobInterface
 {
     public $grid;
 
