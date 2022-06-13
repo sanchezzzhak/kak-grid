@@ -19,13 +19,14 @@
     }
   ],
   "require": {
+    "php": "~7.1 | ~8.1",
     "yiisoft/yii2": "*",
     "box/spout": "2.7.3",
     "bower-asset/jquery-resizable-columns": "^0.2.3",
     "bower-asset/store.js": "~2.0"
   },
   "require-dev": {
-    "codeception/codeception": "4.1.22",
+    "codeception/codeception": "4.*",
     "codeception/module-asserts": "1.3",
     "codeception/module-yii2": "1.1"
   },
