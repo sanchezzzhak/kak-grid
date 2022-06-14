@@ -243,7 +243,7 @@ Class UserGrid extends AbstractGrid
 {
     // optional
     public $group;
-            
+             
     public function columns(): array
     {
         $columns = [
