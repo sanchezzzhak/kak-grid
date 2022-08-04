@@ -56,7 +56,15 @@ class ColumnMapper
                     : isset($model[$column->attribute]) ? $model[$column->attribute]: null;
 
                 $value = $this->getColumnValue($column, $model, $key, $index);
-                $row[] = $value;
+                switch ($this->type) {
+                    case 'xml':
+                        $header = $this->columnHeader ? $this->getColumnHeader($column) : $column->attribute;
+                        $row[$header] = $value;
+                        break;
+                    default:
+                        $row[] = $value;
+                        break;
+                }
             }
         }
 
