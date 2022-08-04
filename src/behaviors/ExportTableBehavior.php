@@ -1,5 +1,7 @@
 <?php
+
 namespace kak\widgets\grid\behaviors;
+
 use kak\widgets\grid\interfaces\ExportType;
 use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
@@ -10,29 +12,31 @@ use Yii;
  * @package kak\widgets\grid\behaviors
  *
  * ```php
-    'behaviors' => [
-        [
-            'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
-            'toolbar' => [
-                [
-                    // attach ExportTableBehavior placeholder
-                    'content' => '<div class="form-group">'
-                        . '<div class="col-md-2 col-sm-4">{pagesize}</div>'
-                        . '<div class="col-md-2">{exporttable}</div>'
-                        . '</div>'
-                ]
-            ]
-        ]
-        ],[
-            'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
+'behaviors' => [
+[
+'class' => \kak\widgets\grid\behaviors\ToolBarBehavior::className(),
+'toolbar' => [
+[
+// attach ExportTableBehavior placeholder
+'content' => '<div class="form-group">'
+. '<div class="col-md-2 col-sm-4">{pagesize}</div>'
+. '<div class="col-md-2">{exporttable}</div>'
+. '</div>'
+]
+]
+]
+],[
+'class' => \kak\widgets\grid\behaviors\ExportTableBehavior::className(),
 
-        ]
-    ],
+]
+],
  * ```
  */
 class ExportTableBehavior extends Behavior
 {
-     public $dropDownOptions = [];
+    public $dropDownOptions = [];
+
+    public $columnHeader = true;
 
     /**
      * @var array is empty list then export all columns
@@ -52,8 +56,7 @@ class ExportTableBehavior extends Behavior
      */
     public function renderExportTable()
     {
-        $output = $this->initButtonDropdown();
-        return $output;
+        return $this->initButtonDropdown();
     }
 
     /**
@@ -86,6 +89,7 @@ class ExportTableBehavior extends Behavior
             $service->type = $type;
             $service->limit = $this->limit;
             $service->exportColumns = $this->exportColumns;
+            $service->columnHeader = $this->columnHeader;
             $service->run();
         }
     }
