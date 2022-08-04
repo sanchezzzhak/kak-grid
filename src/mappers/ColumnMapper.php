@@ -56,7 +56,7 @@ class ColumnMapper
                     : $model[$column->attribute] ?? $model[$column->attribute] ?? $key ?? null;
 
                 $value = $this->getColumnValue($column, $model, $modelKey, $index);
-                $header = $this->columnHeader ? $this->getColumnHeader($column) : $column->attribute ?? $key;
+                $header = $column->attribute ?? $key;
                 $row[$header] = $value;
             }
         }
