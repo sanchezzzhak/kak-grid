@@ -17,13 +17,15 @@ class ColumnMapper
     private $exportColumns = [];
     private $removeHtml = true;
     private $columnHeader = true;
+    private $type = '';
 
-    public function __construct($columns, $exportColumns, $removeHtml, $columnHeader)
+    public function __construct($columns, $exportColumns, $removeHtml, $columnHeader, $type)
     {
         $this->columns = $columns;
         $this->exportColumns = $exportColumns;
         $this->removeHtml = $removeHtml;
         $this->columnHeader = $columnHeader;
+        $this->type = $type;
     }
 
 
@@ -56,8 +58,16 @@ class ColumnMapper
                     : isset($model[$column->attribute]) ? $model[$column->attribute]: null;
 
                 $value = $this->getColumnValue($column, $model, $key, $index);
-                $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
-                $row[$header] = $value;
+
+                switch ($this->type) {
+                    case 'xml':
+                        $header = $this->columnHeader ? $this->getColumnHeader($column) : $column->attribute;
+                        $row[$header] = $value;
+                        break;
+                    default:
+                        $row[] = $value;
+                        break;
+                }
             }
         }
 
