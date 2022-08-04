@@ -57,7 +57,7 @@ class ExportService
         /** @var BaseDataProvider $dataProvider */
         $dataProvider = $this->grid->dataProvider;
 
-        $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader);
+        $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader, $this->type);
         $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper, $this->limit));
 
         $writer->openToBrowser($this->getFileName());

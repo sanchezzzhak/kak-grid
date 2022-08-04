@@ -12,7 +12,6 @@ use yii\grid\ActionColumn;
  */
 class ColumnMapper
 {
-
     private $columns = [];
     private $exportColumns = [];
     private $removeHtml = true;
@@ -26,19 +25,20 @@ class ColumnMapper
         $this->columnHeader = $columnHeader;
     }
 
-
     public function getHeaders()
     {
         $headers = [];
         /** @var DataColumn $column */
-        foreach ($this->columns as $column) {
+        foreach ($this->columns as $key => $column) {
             if ($this->isColumnExportable($column)) {
-                $headers[] = $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
+                $attributeKey = $column->attribute ?? $key;
+                $value = $this->columnHeader ? $this->getColumnHeader($column) : $attributeKey;
+                $headers[] = $value;
             }
         }
+
         return $headers;
     }
-
 
     /**
      * @param $model
@@ -48,19 +48,18 @@ class ColumnMapper
     public function map($model, $index)
     {
         $row = [];
-        foreach ($this->columns as $column) {
+        foreach ($this->columns as $key => $column) {
             if ($this->isColumnExportable($column)) {
                 /** @var DataColumn $column */
-                $key = $model instanceof ActiveRecordInterface
+                $modelKey = $model instanceof ActiveRecordInterface
                     ? $model->getPrimaryKey()
-                    : isset($model[$column->attribute]) ? $model[$column->attribute]: null;
+                    : $model[$column->attribute] ?? $model[$column->attribute] ?? $key ?? null;
 
-                $value = $this->getColumnValue($column, $model, $key, $index);
-                $header = $this->columnHeader ? $this->getColumnHeader($column): $column->attribute;
+                $value = $this->getColumnValue($column, $model, $modelKey, $index);
+                $header = $column->attribute ?? $key;
                 $row[$header] = $value;
             }
         }
-
         return $row;
     }
 
@@ -93,14 +92,19 @@ class ColumnMapper
      */
     protected function isColumnExportable($column)
     {
-        if ($column instanceof ActionColumn || $column instanceof CheckboxColumn || ($column instanceof DataColumn && $column->export === false)) {
+        if (
+            $column instanceof ActionColumn ||
+            $column instanceof CheckboxColumn ||
+            ($column instanceof DataColumn && $column->export === false)
+        ) {
             return false;
         }
+
         if (!empty($this->exportColumns)) {
             return in_array($column->attribute, $this->exportColumns);
         }
+
         return true;
     }
-
 
 }
