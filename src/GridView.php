@@ -35,7 +35,7 @@ class GridView extends \yii\grid\GridView
     /*** @var array */
     public $contentOptions = [];
     /** @var array  */
-    private $_behaviors = [];
+    private $behaviors = [];
 
     /**
      * Provide the option to be able to set behaviors on GridView configuration.
@@ -44,7 +44,12 @@ class GridView extends \yii\grid\GridView
      */
     public function setBehaviors(array $behaviors = [])
     {
-        $this->_behaviors = $behaviors;
+        $this->behaviors = $behaviors;
+    }
+
+    public function getBehaviors(): array
+    {
+        return $this->behaviors;
     }
 
     /**
@@ -53,7 +58,7 @@ class GridView extends \yii\grid\GridView
      */
     public function behaviors()
     {
-        return ArrayHelper::merge($this->_behaviors, parent::behaviors());
+        return ArrayHelper::merge($this->getBehaviors(), parent::behaviors());
     }
 
     public function init()
@@ -66,7 +71,7 @@ class GridView extends \yii\grid\GridView
         parent::init();
     }
 
-    public function initContainerOptions()
+    public function initContainerOptions(): void
     {
         if (!$this->sortArrow) {
             return;

@@ -55,6 +55,11 @@ class DataColumn extends \yii\grid\DataColumn
     /** @var \kak\widgets\grid\GridView */
     public $grid;
 
+    /**
+     * render header
+     *
+     * @return string
+     */
     public function renderHeaderCell()
     {
         $headerOptions = $this->headerOptions;
@@ -110,7 +115,9 @@ class DataColumn extends \yii\grid\DataColumn
     {
         if ($this->summary instanceof \Closure || is_callable($this->summary)) {
             return call_user_func($this->summary, $this->grid->dataProvider->getModels(), $this);
-        } else if (!empty($this->summary)) {
+        }
+
+        if (!empty($this->summary)) {
             return GridHelper::summary($this->grid->dataProvider->getModels(), $this->attribute, $this->summary);
         }
         return null;
