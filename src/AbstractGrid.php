@@ -3,10 +3,12 @@
 namespace kak\widgets\grid;
 
 use yii\base\BaseObject;
+use yii\base\InvalidConfigException;
 use yii\base\Model;
 use yii\data\BaseDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\i18n\Formatter;
 
 /**
  * Class AbstractGrid
@@ -19,9 +21,33 @@ abstract class AbstractGrid extends BaseObject
     /** @var Model */
     private $filterModel;
 
+    public $formatMoneyOptions = [];
+    public $formatMoneyTextOptions = [];
+    public $formatDecimalOptions = [];
+    public $formatDecimalTextOptions = [];
+
     /**
      * Ready config for GridView
-     *
+     * @example
+     * the code for controller
+     * ```php
+     * $model = new SearchUserForm();
+     * $grid = new GridStat([
+     *    'provider' => $model->search($this->request->get()),
+     * ]);
+     * return $this->render('index', compact('grid', 'model'))
+     * ```
+     * the code for view
+     * ```php
+     * echo GridView::widget($grid->getConfig());
+     * ```
+     * or
+     * ```
+     * GridView::widget([
+     *    'dataProvider' => $grid->getProvider(),
+     *    'columns' => $grid->getColumns(),
+     * ]);
+     * ```
      * @return array
      * @throws \Exception
      */
@@ -43,12 +69,20 @@ abstract class AbstractGrid extends BaseObject
      *
      * get<Name>Column
      * @return array
-     * ```
+     * @example
+     * ```php
      *  return [
      *      'columnName1' => $this->getStatus1Column()
      *      'columnName2' => $this->getStatus2Column()
      *  ];
-     * ```
+     *```
+     * or filter columns
+     *
+     * ```php
+     *  return $this->composeColumns([
+     *     'columnName1' => $this->getStatus1Column()
+     *     'columnName2' => $this->getStatus2Column()
+     *  ], $this->group);
      */
     abstract public function columns(): array;
 
@@ -84,6 +118,8 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
+     *  Get dataprovider class
+     *
      * @return mixed
      * @throws \Exception
      */
@@ -104,6 +140,8 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
+     * Get filter model
+     *
      * @return Model
      */
     public function getFilterModel()
@@ -112,6 +150,8 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
+     * Set filter model
+     *
      * @param Model $filterModel
      */
     public function setFilterModel($filterModel): void
@@ -120,16 +160,30 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
+     * Get Formatter class
+     *
+     * @return Formatter
+     */
+    public function getFormatter(): Formatter
+    {
+        return \Yii::$app->getFormatter();
+    }
+
+    /**
+     * Render format number
+     *
      * @param float $value
      * @param int $decimals
      * @return string
      */
     protected function asFormatNumber(float $value, int $decimals = 2): string
     {
-        return \Yii::$app->getFormatter()->asDecimal($value, $decimals);
+        return $this->getFormatter()->asDecimal($value, $decimals);
     }
 
     /**
+     * Render html textarea
+     *
      * @param string $value
      * @param array $options
      * @return string
@@ -144,6 +198,8 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
+     * Render html input text
+     *
      * @param string $value
      * @param array $options
      * @return string
@@ -158,22 +214,51 @@ abstract class AbstractGrid extends BaseObject
     }
 
     /**
-     * @param $value
+     * Render format money
+     *
+     * @param int|float $value
+     * @param string|null $currency
+     * @param array|null $options
+     * @param array|null $textOptions
      * @return string
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
-    protected function asFormatMoney($value): string
+    protected function asFormatMoney(
+        $value,
+        $currency = null,
+        ?array $options = null,
+        ?array $textOptions = null
+    ): string
     {
-        return \Yii::$app->getFormatter()->asCurrency($value);
+        return $this->getFormatter()->asCurrency(
+            $value,
+            $currency,
+            $options ?? $this->formatMoneyOptions,
+            $textOptions ?? $this->formatMoneyTextOptions
+        );
     }
 
     /**
-     * @param $value
-     * @param null $deciaml
+     * Render format decimal
+     *
+     * @param int|float $value
+     * @param int|null $decimals
+     * @param array|null $options
+     * @param array|null $textOptions
      * @return string
      */
-    protected function asDecimal($value, $deciaml = null): string
+    protected function asDecimal(
+        $value,
+        $decimals = null,
+        ?array $options = null,
+        ?array $textOptions = null
+    ): string
     {
-        return \Yii::$app->getFormatter()->asDecimal($value, $deciaml);
+        return $this->getFormatter()->asDecimal(
+            $value,
+            $decimals,
+            $options ?? $this->formatDecimalOptions,
+            $textOptions ?? $this->formatDecimalTextOptions
+        );
     }
 }
