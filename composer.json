@@ -34,6 +34,9 @@
       "kak\\widgets\\grid\\": "src"
     }
   },
+  "archive": {
+    "exclude": ["demos"]
+  },
   "config": {
     "process-timeout": 1800,
     "fxp-asset": {
