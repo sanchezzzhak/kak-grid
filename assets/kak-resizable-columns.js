@@ -533,4 +533,4 @@
 
   $.resizableColumns = ResizableColumns;
   
-})(Jquery)
+})(jQuery)
