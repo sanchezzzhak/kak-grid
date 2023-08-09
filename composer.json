@@ -17,9 +17,7 @@
     "require": {
         "yiisoft/yii2": "*",
         "box/spout" : "2.7.3",
-        "bower-asset/jquery-resizable-columns" : "^0.2.3",
         "bower-asset/store.js": "~2.0"
-
     },
     "autoload": {
         "psr-4": {

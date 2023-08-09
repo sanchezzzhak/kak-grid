@@ -32,8 +32,6 @@ class ResizableColumnsBehavior extends Behavior
         $id = $this->owner->getId();
         $view = $this->owner->getView();
 
-        \kak\widgets\grid\bundles\ResizableColumnsAsset::register($view);
-
         $options = !empty($this->clientOptions)
             ? Json::htmlEncode($this->clientOptions)
             : '';
