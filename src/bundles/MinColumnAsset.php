@@ -1,5 +1,5 @@
-
 <?php
+
 namespace kak\widgets\grid\bundles;
 
 use yii\web\AssetBundle;
