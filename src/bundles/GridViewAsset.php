@@ -13,7 +13,8 @@ class GridViewAsset extends AssetBundle
         'yii\web\JqueryAsset',
     ];
     public $js = [
-        'kak.grid-view.js'
+        'kak.grid-view.js',
+        'kak-resizable-columns.js',
     ];
     public $css = [
         'kak.grid-view.css'
