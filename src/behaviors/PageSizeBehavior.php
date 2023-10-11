@@ -63,8 +63,8 @@ class PageSizeBehavior extends Behavior
         $owner = $this->owner;
 
         // set selector filters
-        $selector = ' #'.$owner->id . ' select[name="per-page"]';
-        $filters = explode(',', $owner->filterSelector);
+        $selector = sprintf(' #%s select[name="per-page"]', $owner->id);
+        $filters = explode(',', (string)$owner->filterSelector);
         if (!in_array($selector, $filters)) {
             $filters[] = $selector;
             $owner->filterSelector = implode(',', array_filter($filters, function ($val) {
