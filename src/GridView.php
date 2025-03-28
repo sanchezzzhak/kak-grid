@@ -77,9 +77,9 @@ class GridView extends \yii\grid\GridView
     public function initContainerOptions()
     {
         if($this->sortArrow!=false){
-            Html::addCssClass($this->contentOptions, 'icon-sort');
+            Html::addCssClass($this->options, 'icon-sort');
             if(is_string($this->sortArrow)){
-                Html::addCssClass($this->contentOptions, $this->sortArrow );
+                Html::addCssClass($this->options, $this->sortArrow );
             }
         }
     }
