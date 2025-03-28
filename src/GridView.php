@@ -18,9 +18,9 @@ use kak\widgets\grid\bundles\GridViewAsset;
  */
 class GridView extends \yii\grid\GridView
 {
-    const SORT_ARROW_DIRECTION = 'sort-direction';
-    const SORT_ARROW_ORDINAL = 'sort-ordinal';
-    const SORT_ARROW_NUMERICAL = 'sort-numerical';
+    public const SORT_ARROW_DIRECTION = 'sort-direction';
+    public const SORT_ARROW_ORDINAL = 'sort-ordinal';
+    public const SORT_ARROW_NUMERICAL = 'sort-numerical';
 
     /**
      * @var bool show direct sorted column up/down

@@ -13,12 +13,14 @@ Usage
 Once the extension is installed, simply use it in your code by  :
 ```php
 <?php
-  use kak\widgets\grid\GridView; 
-  use yii\helpers\Html;
+
+use kak\widgets\grid\GridView; 
+use yii\helpers\Html;
   
 echo GridView::widget([
     'showFooter' => true,
     'dataProvider' => $provider,
+    'sortArrow' => GridView::SORT_ARROW_DIRECTION
     'columns' => [
       'user' => [
           'header' => 'user',
