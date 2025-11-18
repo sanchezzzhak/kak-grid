@@ -32,7 +32,7 @@ use Yii;
 ],
  * ```
  */
-class ExportTableBehavior extends Behavior
+class ExportTableBehavior extends base\BaseExportTableBehavior
 {
     public $dropDownOptions = [];
 
@@ -60,22 +60,6 @@ class ExportTableBehavior extends Behavior
     }
 
     /**
-     * @var array format support export
-     */
-    public $types = [
-        ExportType::CSV => 'CSV',
-        ExportType::XLSX => 'Excel 2007+',
-        //ExportType::GOOGLE => 'Google Spreadsheet',
-        ExportType::ODS => 'Open Document Spreadsheet',
-        ExportType::JSON => 'JSON',
-        ExportType::XML => 'XML',
-        ExportType::TXT => 'TEXT',
-        //ExportType::HTML => 'HTML',
-        //ExportType::PDF => 'PDF'
-    ];
-
-
-    /**
      * run process export grid with dataProvider elements
      */
     protected function process()
@@ -91,6 +75,8 @@ class ExportTableBehavior extends Behavior
             $service->exportColumns = $this->exportColumns;
             $service->columnHeader = $this->columnHeader;
             $service->run();
+
+            exit();
         }
     }
 

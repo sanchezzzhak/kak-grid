@@ -1,6 +1,8 @@
 <?php
 namespace kak\widgets\grid\mappers;
 
+use Box\Spout\Common\Entity\Cell;
+use Box\Spout\Common\Entity\Row;
 use kak\widgets\grid\columns\CheckboxColumn;
 use kak\widgets\grid\columns\DataColumn;
 use yii\db\ActiveRecordInterface;
@@ -27,17 +29,18 @@ class ColumnMapper
 
     public function getHeaders()
     {
-        $headers = [];
+        $cells = [];
         /** @var DataColumn $column */
         foreach ($this->columns as $key => $column) {
             if ($this->isColumnExportable($column)) {
                 $attributeKey = $column->attribute ?? $key;
+                $column->enableSorting = false;
                 $value = $this->columnHeader ? $this->getColumnHeader($column) : $attributeKey;
-                $headers[] = $value;
+                $cells[] = new Cell($value);
             }
         }
 
-        return $headers;
+        return new Row($cells, null);
     }
 
     /**

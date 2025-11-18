@@ -16,12 +16,23 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "box/spout" : "2.7.3",
+        "box/spout" : "3.3.0",
         "bower-asset/store.js": "~2.0"
     },
     "autoload": {
         "psr-4": {
             "kak\\widgets\\grid\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
         }
     }
 }
