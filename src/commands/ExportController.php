@@ -5,6 +5,7 @@ namespace kak\widgets\grid\commands;
 use kak\widgets\grid\helpers\ExportHelper;
 use yii\console\ExitCode;
 use yii\helpers\Console;
+use yii\helpers\FileHelper;
 
 /**
  * Grid commands.
@@ -22,12 +23,8 @@ class ExportController extends \yii\console\Controller
         $exportDirectory = ExportHelper::directory();
         Console::output(sprintf('Cleanup direcory: %s', $exportDirectory));
 
-        foreach (scandir($exportDirectory) as $fileName) {
-            if (in_array($fileName, ['.', '..'])) {
-                continue;
-            }
-
-            $filePath = sprintf('%s/%s', $exportDirectory, $fileName);
+        foreach (FileHelper::findFiles($exportDirectory) as $filePath) {
+            $fileName = basename($filePath);
             $createdAt = filectime($filePath);
 
             if ($createdAt < time() - self::CLEANUP_INTERVAL) {
