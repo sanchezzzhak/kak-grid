@@ -1,9 +1,12 @@
 <?php
 
 namespace kak\widgets\grid\services\writer;
-use \Box\Spout\Writer\AbstractWriter;
 
-class WriterJson extends AbstractWriter
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\WriterAbstract;
+use RuntimeException;
+
+class WriterJson extends WriterAbstract implements KeyValueDataWriterInterface
 {
     /**
      * @var int current position
@@ -23,11 +26,20 @@ class WriterJson extends AbstractWriter
     /**
      * @inheritdoc
      */
-    protected function addRowToWriter(array $dataRow, $style)
+    protected function addRowToWriter(Row $dataRow)
+    {
+        throw new RuntimeException('Method not implemented');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addRowDataToWriter($dataRow)
     {
         fwrite($this->filePointer, ($this->position > 0 ? ',' : '') . json_encode($dataRow));
         ++$this->position;
     }
+
     /**
      * @inheritdoc
      */

@@ -1,11 +1,13 @@
 <?php
 
 namespace kak\widgets\grid\services\writer;
-use \Box\Spout\Writer\AbstractWriter;
+
+use Box\Spout\Common\Entity\Row;
+use Box\Spout\Writer\WriterAbstract;
 use yii\base\Arrayable;
 use yii\helpers\StringHelper;
 
-class WriterXml extends AbstractWriter
+class WriterXml extends WriterAbstract implements KeyValueDataWriterInterface
 {
     /**
      * @var string the XML version
@@ -48,7 +50,15 @@ class WriterXml extends AbstractWriter
     /**
      * @inheritdoc
      */
-    protected function addRowToWriter(array $dataRow, $style)
+    protected function addRowToWriter(Row $dataRow)
+    {
+        throw new RuntimeException('Method not implemented');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addRowDataToWriter($dataRow)
     {
         $root = new \DOMElement($this->rootTag);
         $this->_dom->appendChild($root);

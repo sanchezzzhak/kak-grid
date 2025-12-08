@@ -1,31 +1,71 @@
 <?php
 
 namespace kak\widgets\grid\services\writer;
+
+use Box\Spout\Common\Creator\HelperFactory;
+use Box\Spout\Common\Exception\UnsupportedTypeException;
 use Box\Spout\Common\Helper\GlobalFunctionsHelper;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use kak\widgets\grid\interfaces\ExportType;
+use kak\widgets\grid\services\manager\JsonOptionsManager;
+use kak\widgets\grid\services\manager\TextOptionsManager;
+use kak\widgets\grid\services\manager\XmlOptionsManager;
 
-class WriterFactory extends \Box\Spout\Writer\WriterFactory
+class WriterFactory extends WriterEntityFactory
 {
-
     public static function create($writerType)
     {
-        $writer = null;
         switch ($writerType) {
+            case ExportType::CSV:
+                return self::createCSVWriter();
+            case ExportType::XLSX:
+                return self::createXLSXWriter();
+            case ExportType::ODS:
+                return self::createODSWriter();
             case ExportType::JSON:
-                $writer = new WriterJson;
-                break;
+                return self::createJsonWriter();
             case ExportType::TXT:
-                $writer = new WriterText;
-                break;
+                return self::createTextWriter();
             case ExportType::XML:
-                $writer = new WriterXml;
-                break;
-//            case 'pdf': break;
-//            case 'txt': break;
-            default:
-                return parent::create($writerType);
+                return self::createXmlWriter();
         }
-        $writer->setGlobalFunctionsHelper(new GlobalFunctionsHelper());
-        return $writer;
+
+        throw new UnsupportedTypeException();
+    }
+
+    public static function createJsonWriter()
+    {
+        try {
+            $optionsManager = new JsonOptionsManager();
+            $functionsHelper = new GlobalFunctionsHelper();
+            $helperFactory = new HelperFactory();
+            return new WriterJson($optionsManager, $functionsHelper, $helperFactory);
+        } catch (UnsupportedTypeException $ex) {
+            // should never happen
+        }
+    }
+
+    public static function createTextWriter()
+    {
+        try {
+            $optionsManager = new TextOptionsManager();
+            $functionsHelper = new GlobalFunctionsHelper();
+            $helperFactory = new HelperFactory();
+            return new WriterText($optionsManager, $functionsHelper, $helperFactory);
+        } catch (UnsupportedTypeException $ex) {
+            // should never happen
+        }
+    }
+
+    public static function createXmlWriter()
+    {
+        try {
+            $optionsManager = new XmlOptionsManager();
+            $functionsHelper = new GlobalFunctionsHelper();
+            $helperFactory = new HelperFactory();
+            return new WriterXml($optionsManager, $functionsHelper, $helperFactory);
+        } catch (UnsupportedTypeException $ex) {
+            // should never happen
+        }
     }
 }

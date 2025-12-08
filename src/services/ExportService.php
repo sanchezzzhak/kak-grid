@@ -1,13 +1,17 @@
 <?php
 namespace  kak\widgets\grid\services;
 
+use Box\Spout\Common\Entity\Cell;
+use Box\Spout\Common\Entity\Row;
 use Box\Spout\Writer\CSV\Writer as CsvWriter;
+use Box\Spout\Writer\WriterInterface;
+use kak\widgets\grid\helpers\ExportHelper;
 use kak\widgets\grid\interfaces\ExportType;
 use kak\widgets\grid\iterators\DataProviderBatchIterator;
 use kak\widgets\grid\iterators\SourceIterator;
 use kak\widgets\grid\mappers\ColumnMapper;
-use yii\data\BaseDataProvider;
 use Yii;
+use yii\data\BaseDataProvider;
 use yii\web\HttpException;
 
 /**
@@ -44,6 +48,8 @@ class ExportService
     /** @var string */
     public $csvFieldDelimiter = ';';
 
+    public $fileName = '';
+
     public function run()
     {
         try {
@@ -60,16 +66,27 @@ class ExportService
         $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader, $this->type);
         $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper, $this->limit));
 
-        $writer->openToBrowser($this->getFileName());
+        $this->openWriter($writer);
 
         if (!in_array($this->type, [ExportType::JSON_ROW,ExportType::JSON, ExportType::XML])) {
             $writer->addRow($mapper->getHeaders());
         }
+
         foreach ($source as $data){
-            $writer->addRow($data);
+            if ($writer instanceof writer\KeyValueDataWriterInterface) {
+                $writer->addRowDataToWriter($data);
+                continue;
+            }
+
+            $cells = [];
+            foreach ($data as $key => $value) {
+                $cells[$key] = new Cell($value);
+            }
+            $row = new Row($cells, null);
+            $writer->addRow($row);
         }
-        $writer->close();
-        exit;
+
+        $this->closeWriter($writer);
     }
 
     /**
@@ -83,7 +100,11 @@ class ExportService
         $type = isset($types[$this->type]) ? $types[$this->type] : $this->type;
         return Yii::$app->controller->id . '-' . Yii::$app->controller->action->id  . '-' . date('Y-m-d-Hi') . '.' . $type;
     }
-    
+
+    /**
+     * Creates a new writer.
+     * @return WriterInterface
+     */
     protected function getWriter()
     {
         $result = writer\WriterFactory::create($this->type);
@@ -93,6 +114,36 @@ class ExportService
         return $result;
     }
 
+    /**
+     * Opens the writer to file or browser.
+     * @param WriterInterface $writer
+     */
+    public function openWriter($writer)
+    {
+        if ($this->fileName !== '') {
+            $fileName = sprintf('%s.part', $this->fileName);
+            $filePath = ExportHelper::buildFilePath($fileName);
+            $writer->openToFile($filePath);
+        } else {
+            $writer->openToBrowser($this->getFileName());
+        }
+    }
+
+    /**
+     * Closing writer properly.
+     * @param WriterInterface $writer
+     */
+    public function closeWriter($writer)
+    {
+        $writer->close();
+
+        if ($this->fileName !== '') {
+            $fileName = sprintf('%s.part', $this->fileName);
+            $filePath = ExportHelper::buildFilePath($fileName);
+            $newFilePath = ExportHelper::buildFilePath($this->fileName);
+            rename($filePath, $newFilePath);
+        }
+    }
 
     protected function initColumnHeaderNamed()
     {
