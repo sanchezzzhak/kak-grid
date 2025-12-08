@@ -2,15 +2,14 @@
 
 namespace kak\widgets\grid\behaviors;
 
+use kak\widgets\grid\behaviors\base\BaseExportTableBehavior;
 use kak\widgets\grid\bundles\ExportTableAsyncAsset;
 use kak\widgets\grid\helpers\ExportHelper;
-use kak\widgets\grid\jobs\ExportTableAsyncJob;
+use kak\widgets\grid\interfaces\ExportTableAsyncJobInterface;
 use Yii;
-use yii\base\Behavior;
 use yii\bootstrap\ButtonDropdown;
 use yii\bootstrap\Html;
 use yii\bootstrap\Progress;
-use yii\queue\JobInterface;
 use yii\queue\Queue;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -19,58 +18,51 @@ use yii\web\Response;
  * @class ExportTableAsyncBehavior
  * @package kak\widgets\grid\behaviors
  */
-class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
+class ExportTableAsyncBehavior extends BaseExportTableBehavior
 {
     /**
      * HTML options for dropdown list.
-     * @var array
      */
-    public $dropDownOptions = [
+    public array $dropDownOptions = [
         'class' => 'export-btn',
     ];
 
     /**
      * Need (or not) to show the column header.
-     * @var bool
      */
-    public $columnHeader = true;
+    public bool $columnHeader = true;
 
     /**
      * List of columns to export.
      * Exports all columns when empty.
-     * @var array
      */
-    public $exportColumns = [];
+    public array $exportColumns = [];
 
     /**
      * Number of rows to export.
-     * Exports all rows when null.
-     * @var int|null
+     * Exports all rows when null.w
      */
-    public $limit = null;
+    public ?int $limit = null;
 
     /**
      * Dropdown menu label.
-     * @var string
      */
-    public $label = '<i class="glyphicon glyphicon-export"></i> Export';
+    public string $label = '<i class="glyphicon glyphicon-export"></i> Export';
 
     /**
      * Queue to push the export job.
-     * @var Queue
      */
-    public $queue;
+    public Queue $queue;
 
     /**
      * Job to push to the queue.
-     * @var ExportTableAsyncJobInterface
      */
-    public $job;
+    public ExportTableAsyncJobInterface $job;
 
     /**
      * Renders the output.
      */
-    public function renderExportTable()
+    public function renderExportTable(): string
     {
         $view = $this->owner->getView();
         ExportTableAsyncAsset::register($view);
@@ -80,9 +72,8 @@ class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
 
     /**
      * Initializes button dropdown.
-     * @return string
      */
-    public function initButtonDropdown()
+    public function initButtonDropdown(): string
     {
         $this->process();
 
@@ -131,7 +122,7 @@ class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
      * Processes the request.
      * @throws NotFoundHttpException
      */
-    protected function process()
+    protected function process(): void
     {
         if (Yii::$app->request->post('export') == 1) {
             Yii::$app->response->clearOutputBuffers();
@@ -155,7 +146,7 @@ class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
     /**
      * Starts the export job.
      */
-    protected function startJob()
+    protected function startJob(): void
     {
         $type = Yii::$app->request->post('type');
         $salt = Yii::$app->request->post('salt');
@@ -172,7 +163,7 @@ class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
     /**
      * Checks if export file exists.
      */
-    protected function checkStatus()
+    protected function checkStatus(): void
     {
         $userId = Yii::$app->user->id;
         $type = Yii::$app->request->post('type');
@@ -191,7 +182,7 @@ class ExportTableAsyncBehavior extends base\BaseExportTableBehavior
      * Downloads export file.
      * @throws NotFoundHttpException
      */
-    protected function downloadFile()
+    protected function downloadFile(): void
     {
         $userId = Yii::$app->user->id;
         $type = Yii::$app->request->post('type');

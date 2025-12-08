@@ -11,9 +11,9 @@ use yii\base\Behavior;
 abstract class BaseExportTableBehavior extends Behavior
 {
     /**
-     * @var array format support export
+     * @var array<string, string> format support export
      */
-    public $types = [
+    public array $types = [
         ExportType::CSV => 'CSV',
         ExportType::XLSX => 'Excel 2007+',
         //ExportType::GOOGLE => 'Google Spreadsheet',

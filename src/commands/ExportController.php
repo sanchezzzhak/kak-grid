@@ -16,9 +16,8 @@ class ExportController extends \yii\console\Controller
 
     /**
      * Removes temporary files.
-     * @return int
      */
-    public function actionClean()
+    public function actionClean(): int
     {
         $exportDirectory = ExportHelper::directory();
         Console::output(sprintf('Cleanup direcory: %s', $exportDirectory));
