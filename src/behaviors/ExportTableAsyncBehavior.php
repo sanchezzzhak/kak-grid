@@ -171,10 +171,17 @@ class ExportTableAsyncBehavior extends BaseExportTableBehavior
 
         $fileName = ExportHelper::buildFileName($userId, $type, $salt);
         $filePath = ExportHelper::buildFilePath($fileName);
-        $result = file_exists($filePath);
+
+        if (file_exists($filePath)) {
+            $result = ['status' => true, 'state' => 'ready', 'percent' => 100];
+        } else {
+            $progress = ExportHelper::getProgress($fileName);
+
+            $result = ['status' => false, 'state' => $progress['state'], 'percent' => $progress['percent']];
+        }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
-        Yii::$app->response->data = ['status' => $result];
+        Yii::$app->response->data = $result;
         Yii::$app->response->send();
     }
 
