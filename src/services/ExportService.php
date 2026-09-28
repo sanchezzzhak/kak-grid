@@ -64,7 +64,12 @@ class ExportService
         $dataProvider = $this->grid->dataProvider;
 
         $mapper = new ColumnMapper($this->grid->columns, $this->exportColumns, $this->columnRemoveHtml, $this->columnHeader, $this->type);
-        $source = new SourceIterator(new DataProviderBatchIterator($dataProvider, $mapper, $this->limit));
+        $iterator = new DataProviderBatchIterator($dataProvider, $mapper, $this->limit);
+        $source = new SourceIterator($iterator);
+
+        $total = $iterator->count();
+        $processed = 0;
+        $progressStep = max(1, (int)ceil($total / 100));
 
         $this->openWriter($writer);
 
@@ -72,21 +77,37 @@ class ExportService
             $writer->addRow($mapper->getHeaders());
         }
 
-        foreach ($source as $data){
+        foreach ($source as $data) {
             if ($writer instanceof writer\KeyValueDataWriterInterface) {
                 $writer->addRowDataToWriter($data);
-                continue;
+            } else {
+                $cells = [];
+
+                foreach ($data as $key => $value) {
+                    $cells[$key] = new Cell($value);
+                }
+
+                $row = new Row($cells, null);
+                $writer->addRow($row);
             }
 
-            $cells = [];
-            foreach ($data as $key => $value) {
-                $cells[$key] = new Cell($value);
+            $processed++;
+
+            if (
+                $this->fileName !== '' &&
+                ($processed % $progressStep === 0 || $processed === $total)
+            ) {
+                $percent = $total > 0 ? (int)floor($processed / $total * 100) : 100;
+
+                ExportHelper::saveProgress($this->fileName, 'processing', min($percent, 99));
             }
-            $row = new Row($cells, null);
-            $writer->addRow($row);
         }
 
         $this->closeWriter($writer);
+
+        if ($this->fileName !== '') {
+            ExportHelper::deleteProgress($this->fileName);
+        }
     }
 
     /**

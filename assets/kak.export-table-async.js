@@ -39,8 +39,23 @@
         }
 
         function checkStatus(response) {
-            const status = response.status ?? 0;
-            if (!status) {
+            if (response.percent !== undefined) {
+                const percent = Number(response.percent);
+
+                if (!Number.isNaN(percent)) {
+                    progress
+                        .find('.progress-bar')
+                        .css('width', `${percent}%`)
+                        .text(`${percent}%`);
+                }
+            }
+
+            if (response.state === 'failed') {
+                showError(response.message);
+                return;
+            }
+
+            if (!response.status) {
                 setTimeout(fetchStatus, 1000);
                 return;
             }
@@ -87,7 +102,7 @@
             console.error(err);
             btnGroup.show();
             progress.hide();
-            alert('Ошибка');
+            alert(err);
         }
     };
 
