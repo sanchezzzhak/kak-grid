@@ -94,8 +94,7 @@ class ExportService
             $processed++;
 
             if (
-                $this->fileName !== ''
-                &&
+                $this->fileName !== '' &&
                 ($processed % $progressStep === 0 || $processed === $total)
             ) {
                 $percent = $total > 0 ? (int)floor($processed / $total * 100) : 100;

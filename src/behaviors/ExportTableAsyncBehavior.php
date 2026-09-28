@@ -177,7 +177,12 @@ class ExportTableAsyncBehavior extends BaseExportTableBehavior
         } else {
             $progress = ExportHelper::getProgress($fileName);
 
-            $result = ['status' => false, 'state' => $progress['state'], 'percent' => $progress['percent']];
+            $result = [
+                'status' => false,
+                'state' => $progress['state'],
+                'percent' => $progress['percent'],
+                'message' => $progress['message']
+            ];
         }
 
         Yii::$app->response->format = Response::FORMAT_JSON;

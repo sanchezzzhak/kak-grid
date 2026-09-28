@@ -51,7 +51,7 @@
             }
 
             if (response.state === 'failed') {
-                showError('Не удалось сформировать файл');
+                showError(response.message);
                 return;
             }
 
@@ -102,7 +102,7 @@
             console.error(err);
             btnGroup.show();
             progress.hide();
-            alert('Ошибка');
+            alert(err);
         }
     };
 

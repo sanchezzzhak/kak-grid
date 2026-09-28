@@ -55,18 +55,21 @@ class ExportHelper
      * @param string $fileName
      * @param string $state
      * @param int $percent
+     * @param string|null $message
      * @return void
      */
-    public static function saveProgress(string $fileName, string $state, int $percent = 0): void
+    public static function saveProgress(string $fileName, string $state, int $percent = 0, ?string $message = null): void
     {
         $filePath = self::buildProgressFilePath($fileName);
         $tmpFilePath = sprintf('%s.tmp', $filePath);
 
-        file_put_contents(
-            $tmpFilePath,
-            Json::encode(['state' => $state, 'percent' => max(0, min($percent, 100))])
-        );
+        $data = ['state' => $state, 'percent' => max(0, min($percent, 100))];
 
+        if ($message !== null) {
+            $data['message'] = $message;
+        }
+
+        file_put_contents($tmpFilePath, Json::encode($data));
         rename($tmpFilePath, $filePath);
     }
 
@@ -95,6 +98,7 @@ class ExportHelper
         return [
             'state' => $progress['state'] ?? 'queued',
             'percent' => (int)($progress['percent'] ?? 0),
+            'message' => $progress['message'] ?? null
         ];
     }
 
